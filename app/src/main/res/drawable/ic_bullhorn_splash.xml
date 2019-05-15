@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/ic_bullhorn"
+    tools:ignore="NewApi">
+
+    <target
+        android:animation="@animator/bullhorh_spike_1_alpha"
+        android:name="spike_1" />
+    <target
+        android:animation="@animator/bullhorh_spike_2_alpha"
+        android:name="spike_2" />
+    <target
+        android:animation="@animator/bullhorh_spike_3_alpha"
+        android:name="spike_3" />
+    <target
+        android:animation="@animator/bullhorh_center_pin_group_scale"
+        android:name="center_pin_group" />
+
+</animated-vector>

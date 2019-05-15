@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator
+        android:duration="@integer/bullhorn_animation_spike_3_offset"
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="0"
+        android:valueType="floatType" />
+    <objectAnimator
+        android:duration="@integer/bullhorn_animation_spike_duration"
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:startOffset="@integer/bullhorn_animation_spike_3_offset"
+        android:valueType="floatType" />
+</set>
