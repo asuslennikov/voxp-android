@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Voxp</string>
     <string name="splash_fragment_logo_description">Иконка загрузки приложения</string>
+    <string name="splash_fragment_loading_text">Загружаемся</string>
 </resources>
