@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 
 class SplashFragment : Fragment() {
 
@@ -24,6 +25,10 @@ class SplashFragment : Fragment() {
         if (logoDrawable is Animatable) {
             logoDrawable.start()
         }
-
+        ivLogo?.postDelayed({
+            if (isAdded) {
+                ivLogo.findNavController().navigate(R.id.action_splashFragment_to_lastLawsFragment)
+            }
+        }, 4000L)
     }
 }

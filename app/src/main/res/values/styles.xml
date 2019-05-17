@@ -12,7 +12,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="text_header_style">
+    <style name="TextHeader">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/text_header_size</item>
         <item name="android:textStyle">bold</item>

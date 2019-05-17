@@ -9,5 +9,14 @@
         android:id="@+id/splashFragment"
         android:name="ru.voxp.android.SplashFragment"
         android:label="splash_fragment"
-        tools:layout="@layout/splash_fragment" />
+        tools:layout="@layout/splash_fragment">
+        <action
+            android:id="@+id/action_splashFragment_to_lastLawsFragment"
+            app:destination="@id/lastLawsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lastLawsFragment"
+        android:name="ru.voxp.android.LastLawsFragment"
+        android:label="last_laws_fragment"
+        tools:layout="@layout/last_laws_fragment" />
 </navigation>

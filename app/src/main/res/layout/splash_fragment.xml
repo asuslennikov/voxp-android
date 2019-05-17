@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/splash_fragment_logo"
-        android:layout_width="192dp"
-        android:layout_height="192dp"
+        android:layout_width="@dimen/splash_fragment_logo_size"
+        android:layout_height="@dimen/splash_fragment_logo_size"
         android:layout_marginStart="@dimen/splash_fragment_logo_margin_start"
         android:contentDescription="@string/splash_fragment_logo_description"
         android:paddingStart="@dimen/element_default_padding"
@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/splash_fragment_loading"
-        style="@style/text_header_style"
+        style="@style/TextHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
