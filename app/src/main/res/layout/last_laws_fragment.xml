@@ -12,8 +12,9 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
-        android:paddingStart="@dimen/element_default_padding"
         android:padding="@dimen/element_default_padding"
+        android:paddingStart="@dimen/element_default_padding"
+        android:transitionName="last_laws_fragment_toolbar_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_bullhorn" />

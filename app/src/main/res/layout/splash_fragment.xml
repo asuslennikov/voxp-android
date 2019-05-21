@@ -16,6 +16,7 @@
         android:paddingStart="@dimen/element_default_padding"
         android:paddingTop="@dimen/element_default_padding"
         android:paddingEnd="@dimen/element_default_padding"
+        android:transitionName="splash_fragment_logo"
         app:layout_constraintBottom_toTopOf="@+id/splash_fragment_loading"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
