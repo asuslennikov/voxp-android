@@ -1,12 +1,13 @@
-package ru.voxp.android
+package ru.voxp.android.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ru.voxp.android.R.layout
 
 class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.root_activity)
+        setContentView(layout.root_activity)
     }
 }

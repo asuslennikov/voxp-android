@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="ru.voxp.android.SplashFragment"
+        android:name="ru.voxp.android.presentation.SplashFragment"
         android:label="splash_fragment"
         tools:layout="@layout/splash_fragment">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/lastLawsFragment"
-        android:name="ru.voxp.android.LastLawsFragment"
+        android:name="ru.voxp.android.presentation.LastLawsFragment"
         android:label="last_laws_fragment"
         tools:layout="@layout/last_laws_fragment" />
 </navigation>

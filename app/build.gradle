@@ -47,8 +47,11 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$versions.navigation"
-
+    implementation "com.google.dagger:dagger:$versions.dagger"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:core:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.1.1'

@@ -30,6 +30,7 @@ task clean(type: Delete) {
 ext {
     versions = [
             lifecycle : '2.0.0',
-            navigation: '2.0.0'
+            navigation: '2.0.0',
+            'dagger': '2.22.1'
     ]
 }

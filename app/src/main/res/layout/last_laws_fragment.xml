@@ -5,7 +5,7 @@
     android:id="@+id/last_laws_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LastLawsFragment">
+    tools:context=".presentation.LastLawsFragment">
 
     <ImageView
         android:id="@+id/last_laws_fragment_toolbar_icon"

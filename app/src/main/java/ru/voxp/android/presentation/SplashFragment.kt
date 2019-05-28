@@ -1,4 +1,4 @@
-package ru.voxp.android
+package ru.voxp.android.presentation
 
 import android.graphics.drawable.Animatable
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
+import ru.voxp.android.R
+import ru.voxp.android.R.layout
 
 class SplashFragment : Fragment() {
 
@@ -16,7 +18,7 @@ class SplashFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.splash_fragment, container, false)
+        return inflater.inflate(layout.splash_fragment, container, false)
     }
 
     override fun onStart() {
