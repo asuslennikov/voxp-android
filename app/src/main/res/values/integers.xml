@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="bullhorn_animation_spike_duration">200</integer>
+    <integer name="bullhorn_animation_spike_duration">150</integer>
     <integer name="bullhorn_animation_spike_1_offset">600</integer>
-    <integer name="bullhorn_animation_spike_2_offset">800</integer>
-    <integer name="bullhorn_animation_spike_3_offset">1000</integer>
+    <integer name="bullhorn_animation_spike_2_offset">750</integer>
+    <integer name="bullhorn_animation_spike_3_offset">900</integer>
     <integer name="bullhorn_animation_center_pin_duration">800</integer>
-    <integer name="bullhorn_animation_center_pin_offset">1200</integer>
+    <integer name="bullhorn_animation_center_pin_offset">1050</integer>
+    <integer name="bullhorn_animation_duration">2500</integer>
 </resources>
