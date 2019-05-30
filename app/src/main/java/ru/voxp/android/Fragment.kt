@@ -20,10 +20,10 @@ abstract class Fragment<STATE : State, VM : ViewModel<STATE>, B : ViewDataBindin
     }
 
     override fun getBindingStateVariableId(): Int {
-        return 0
+        return BR.state
     }
 
     override fun getBindingViewModelVariableId(): Int {
-        return 0
+        return BR.viewModel
     }
 }
