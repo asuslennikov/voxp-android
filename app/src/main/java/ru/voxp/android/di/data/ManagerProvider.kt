@@ -1,3 +1,8 @@
 package ru.voxp.android.di.data
 
-interface ManagerProvider
+import ru.voxp.android.data.VoxpApi
+
+interface ManagerProvider {
+
+    fun getVoxpApi(): VoxpApi
+}

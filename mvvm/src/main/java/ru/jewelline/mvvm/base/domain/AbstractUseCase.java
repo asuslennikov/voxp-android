@@ -1,12 +1,14 @@
 package ru.jewelline.mvvm.base.domain;
 
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
+import ru.jewelline.mvvm.BuildConfig;
 import ru.jewelline.mvvm.interfaces.domain.UseCase;
 import ru.jewelline.mvvm.interfaces.domain.UseCaseInput;
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput;
@@ -69,6 +71,9 @@ public abstract class AbstractUseCase<IN extends UseCaseInput,
                     communicator.notifySuccess();
                 }
             } catch (Throwable t) {
+                if (BuildConfig.DEBUG) {
+                    Log.d("UseCaseInterceptor", "Exception during use case execution: ", t);
+                }
                 communicator.notifyFailure(t);
             }
             if (!emitter.isDisposed()) {

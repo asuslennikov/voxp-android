@@ -31,6 +31,7 @@ ext {
     versions = [
             lifecycle : '2.0.0',
             navigation: '2.0.0',
-            'dagger': '2.22.1'
+            dagger: '2.22.1',
+            retrofit: '2.5.0'
     ]
 }

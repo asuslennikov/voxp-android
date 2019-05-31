@@ -3,7 +3,7 @@ package ru.voxp.android.presentation
 import android.util.Log
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
-import ru.voxp.android.data.GetLastLawsUseCase
+import ru.voxp.android.domain.GetLastLawsUseCase
 import javax.inject.Inject
 
 class LastLawsViewModel @Inject constructor(private val lastLawsUseCase: GetLastLawsUseCase) :
