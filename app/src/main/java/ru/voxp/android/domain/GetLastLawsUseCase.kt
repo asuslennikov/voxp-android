@@ -3,7 +3,7 @@ package ru.voxp.android.domain
 import ru.jewelline.mvvm.base.domain.AbstractUseCase
 import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
-import ru.voxp.android.data.VoxpApi
+import ru.voxp.android.data.api.VoxpApi
 import java.util.*
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class GetLastLawsUseCase @Inject constructor(private val voxpApi: VoxpApi) :
         GetLastLawsUseCaseOutput()
 
     override fun doExecute(useCaseInput: EmptyUseCaseInput, communicator: Communicator<GetLastLawsUseCaseOutput>) {
-        val lastLaws = voxpApi.getLastLaws()
+        val lastLaws = voxpApi.getLastLaws().execute().body()
         communicator.notify(useCaseOutput.apply {
             laws = Arrays.asList("1", "2")
         })

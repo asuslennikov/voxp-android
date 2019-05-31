@@ -5,11 +5,12 @@ import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import ru.voxp.android.data.HOST_PLACEHOLDER
-import ru.voxp.android.data.HostInterceptor
-import ru.voxp.android.data.VoxpApi
+import retrofit2.converter.jackson.JacksonConverterFactory
+import ru.voxp.android.BuildConfig
+import ru.voxp.android.data.api.VoxpApi
 
 @Module
 internal object ManagerModule {
@@ -22,18 +23,23 @@ internal object ManagerModule {
 
     @Provides
     @ManagerScope
-    fun okHttpClient(): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(HostInterceptor())
-            .build()
+    fun okHttpClient(): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = BODY
+            builder.addInterceptor(loggingInterceptor)
+        }
+        return builder.build()
+    }
 
     @Provides
     @ManagerScope
     fun retrofit(httpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .client(httpClient)
-            .baseUrl(HOST_PLACEHOLDER)
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://voxp.ru")
+            .addConverterFactory(JacksonConverterFactory.create())
             .build()
 
     @Provides

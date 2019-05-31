@@ -50,7 +50,8 @@ dependencies {
     implementation "com.google.dagger:dagger:$versions.dagger"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-jackson:$versions.retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.14.2"
 
     kapt "com.google.dagger:dagger-compiler:$versions.dagger"
 
