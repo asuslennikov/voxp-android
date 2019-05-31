@@ -1,35 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/last_laws_fragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.LastLawsFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/last_laws_fragment_toolbar_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
-        android:padding="@dimen/element_default_padding"
-        android:paddingStart="@dimen/element_default_padding"
-        android:transitionName="last_laws_fragment_toolbar_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_bullhorn" />
+    <data>
 
-    <TextView
-        android:id="@+id/last_laws_fragment_header"
-        style="@style/TextHeader"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center_vertical"
-        android:paddingTop="@dimen/element_default_padding"
-        android:paddingEnd="@dimen/element_default_padding"
-        android:text="@string/last_laws_fragment_header_text"
-        app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/last_laws_fragment_toolbar_icon"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="state"
+            type="ru.voxp.android.presentation.LastLawsState" />
+
+        <variable
+            name="viewModel"
+            type="ru.voxp.android.presentation.LastLawsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/last_laws_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.LastLawsFragment">
+
+        <ImageView
+            android:id="@+id/last_laws_fragment_toolbar_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
+            android:padding="@dimen/element_default_padding"
+            android:paddingStart="@dimen/element_default_padding"
+            android:transitionName="last_laws_fragment_toolbar_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_bullhorn" />
+
+        <TextView
+            android:id="@+id/last_laws_fragment_header"
+            style="@style/TextHeader"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/element_default_padding"
+            android:paddingEnd="@dimen/element_default_padding"
+            android:text="@string/last_laws_fragment_header_text"
+            app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/last_laws_fragment_toolbar_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

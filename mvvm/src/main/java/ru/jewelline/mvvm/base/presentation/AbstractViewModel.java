@@ -3,6 +3,8 @@ package ru.jewelline.mvvm.base.presentation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 import ru.jewelline.mvvm.interfaces.presentation.Effect;
@@ -18,6 +20,7 @@ import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
 public abstract class AbstractViewModel<STATE extends State> extends androidx.lifecycle.ViewModel implements ViewModel<STATE> {
     private final BehaviorSubject<STATE> statePublisher;
     private final PublishSubject<Effect> eventPublisher;
+    private final CompositeDisposable disposable = new CompositeDisposable();
     private STATE currentState;
 
     public AbstractViewModel() {
@@ -99,5 +102,20 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
         if (effect != null) {
             eventPublisher.onNext(effect);
         }
+    }
+
+    /**
+     * Метод позволяет автоматически очистить disposable при завершении работы данной viewModel.
+     *
+     * @param disposable объект подписки на событие
+     */
+    protected void collectDisposable(Disposable disposable) {
+        this.disposable.add(disposable);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
     }
 }

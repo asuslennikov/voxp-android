@@ -17,12 +17,14 @@ internal abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(.class)
-    public abstract ViewModel binds( instance);
+    @ViewModelScope
+    abstract fun binds(instance: ): ViewModel<*>
     */
 
     @Binds
     @IntoMap
     @ViewModelKey(LastLawsViewModel::class)
+    @ViewModelScope
     abstract fun bindsLastLawsViewModel(instance: LastLawsViewModel): ViewModel<*>
 
     @Module
