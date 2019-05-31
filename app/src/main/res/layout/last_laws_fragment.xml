@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="state"
             type="ru.voxp.android.presentation.LastLawsState" />
@@ -45,5 +47,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/last_laws_fragment_toolbar_icon"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/last_laws_fragment_loader"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{ state.loaderVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/last_laws_fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{ state.lawsVisible ? View.VISIBLE : View.GONE}"
+            android:padding="@dimen/element_default_padding"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

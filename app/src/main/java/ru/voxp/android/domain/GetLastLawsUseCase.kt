@@ -3,24 +3,24 @@ package ru.voxp.android.domain
 import ru.jewelline.mvvm.base.domain.AbstractUseCase
 import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
-import ru.voxp.android.data.api.VoxpApi
+import ru.voxp.android.data.api.VoxpManager
+import ru.voxp.android.data.api.model.Law
 import java.util.*
 import javax.inject.Inject
 
 class GetLastLawsUseCaseOutput : AbstractUseCaseOutput() {
-    var laws: List<*>? = null
+    var laws: List<Law>? = null
 }
 
-class GetLastLawsUseCase @Inject constructor(private val voxpApi: VoxpApi) :
+class GetLastLawsUseCase @Inject constructor(private val voxpManager: VoxpManager) :
     AbstractUseCase<EmptyUseCaseInput, GetLastLawsUseCaseOutput>() {
 
     override fun getUseCaseOutput(): GetLastLawsUseCaseOutput =
         GetLastLawsUseCaseOutput()
 
     override fun doExecute(useCaseInput: EmptyUseCaseInput, communicator: Communicator<GetLastLawsUseCaseOutput>) {
-        val lastLaws = voxpApi.getLastLaws().execute().body()
         communicator.notify(useCaseOutput.apply {
-            laws = Arrays.asList("1", "2")
+            laws = voxpManager.getLastLaws().execute().body()?.laws ?: Collections.emptyList()
         })
     }
 }

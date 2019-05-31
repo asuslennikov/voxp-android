@@ -10,7 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import ru.voxp.android.BuildConfig
-import ru.voxp.android.data.api.VoxpApi
+import ru.voxp.android.data.api.VoxpManager
 
 @Module
 internal object ManagerModule {
@@ -44,6 +44,6 @@ internal object ManagerModule {
 
     @Provides
     @ManagerScope
-    fun voxpApi(retrofit: Retrofit): VoxpApi =
-        retrofit.create(VoxpApi::class.java)
+    fun voxpApi(retrofit: Retrofit): VoxpManager =
+        retrofit.create(VoxpManager::class.java)
 }
