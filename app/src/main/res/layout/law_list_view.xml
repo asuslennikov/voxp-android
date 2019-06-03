@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/law_list_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        tools:text="О внесении изменения в статью 12.36.1 Кодекса Российской Федерации об административных правонарушениях" />
+
+    <TextView
+        android:id="@+id/law_list_view_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="об усилении ответственности за нарушение правил пользования телефоном водителем транспортного средства" />
+
+    <TextView
+        android:id="@+id/law_list_view_date"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textStyle="italic"
+        tools:text="От 2019-09-20" />
+</LinearLayout>
