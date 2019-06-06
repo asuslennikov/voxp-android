@@ -4,8 +4,8 @@ import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.SUCCESS
+import ru.voxp.android.data.api.model.Law
 import ru.voxp.android.domain.GetLastLawsUseCase
-import java.util.*
 import javax.inject.Inject
 
 class LastLawsViewModel @Inject constructor(private val lastLawsUseCase: GetLastLawsUseCase) :
@@ -31,10 +31,26 @@ class LastLawsViewModel @Inject constructor(private val lastLawsUseCase: GetLast
                         SUCCESS -> sendState(LastLawsState().apply {
                             loaderVisible = false
                             lawsVisible = true
-                            laws = it.laws ?: Collections.emptyList()
+                            laws = mapLawsToState(it.laws)
                         })
                     }
                 }
-        );
+        )
+    }
+
+    private fun mapLawsToState(modelLaws: List<Law>?): List<LawListState> {
+        val result = ArrayList<LawListState>()
+        if (modelLaws != null && modelLaws.isNotEmpty()) {
+            for (law in modelLaws) {
+                result.add(
+                    LawListState(
+                        law.name ?: "",
+                        law.comments ?: "",
+                        law.introductionDate ?: ""
+                    )
+                )
+            }
+        }
+        return result
     }
 }
