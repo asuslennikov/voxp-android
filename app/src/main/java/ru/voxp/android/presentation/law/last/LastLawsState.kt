@@ -6,6 +6,7 @@ import java.util.*
 
 class LastLawsState : State {
     var loaderVisible: Boolean = false
+    var noInternetVisible: Boolean = false
     var lawsVisible: Boolean = false
     var laws: List<LawCardState> = Collections.emptyList()
 }
