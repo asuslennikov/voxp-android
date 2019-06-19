@@ -6,6 +6,7 @@ import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.SUCCESS
 import ru.voxp.android.data.api.model.Law
 import ru.voxp.android.domain.GetLastLawsUseCase
+import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
 import ru.voxp.android.presentation.law.card.LawCardState
 import ru.voxp.android.presentation.law.card.LawCardViewModel
 import javax.inject.Inject
@@ -13,10 +14,13 @@ import javax.inject.Provider
 
 class LastLawsViewModel @Inject constructor(
     private val lastLawsUseCase: GetLastLawsUseCase,
-    val lawCardViewModelProvider: Provider<LawCardViewModel>
+    lawCardViewModelProvider: Provider<LawCardViewModel>
 ) : AbstractViewModel<LastLawsState>() {
 
+    val lawCardViewModelRegistry: ViewModelRegistry<Long, LawCardViewModel>
+
     init {
+        lawCardViewModelRegistry = ViewModelRegistry(lawCardViewModelProvider)
         requestLastLaws()
     }
 
@@ -24,7 +28,7 @@ class LastLawsViewModel @Inject constructor(
         return LastLawsState()
     }
 
-    private fun requestLastLaws() {
+    fun requestLastLaws() {
         collectDisposable(
             lastLawsUseCase.execute(EmptyUseCaseInput.getInstance())
                 .subscribe {

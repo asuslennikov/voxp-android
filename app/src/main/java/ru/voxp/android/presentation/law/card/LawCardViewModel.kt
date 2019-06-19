@@ -5,5 +5,7 @@ import javax.inject.Inject
 
 class LawCardViewModel @Inject constructor() : AbstractViewModel<LawCardState>() {
     override fun buildInitialState(): LawCardState =
-        LawCardState(0L)
+        throw IllegalStateException("This view model usually should newer create new state by itself")
+
+
 }

@@ -9,6 +9,10 @@
         <variable
             name="state"
             type="ru.voxp.android.presentation.law.card.LawCardState" />
+
+        <variable
+            name="viewModel"
+            type="ru.voxp.android.presentation.law.card.LawCardViewModel" />
     </data>
 
     <LinearLayout

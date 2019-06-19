@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.R
 import ru.voxp.android.databinding.LastLawsFragmentBinding
+import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.presentation.law.card.LawCardAdapter
 
 class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFragmentBinding>(
@@ -22,8 +22,7 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
             duration = 250L
         }
         binding.lastLawsFragmentList.layoutManager = LinearLayoutManager(context)
-        binding.lastLawsFragmentList.adapter =
-            LawCardAdapter(viewModel.lawCardViewModelProvider)
+        binding.lastLawsFragmentList.adapter = LawCardAdapter(viewModel.lawCardViewModelRegistry)
         return view
     }
 
