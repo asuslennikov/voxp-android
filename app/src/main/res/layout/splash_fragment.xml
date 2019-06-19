@@ -7,18 +7,18 @@
 
         <variable
             name="state"
-            type="ru.voxp.android.presentation.SplashState" />
+            type="ru.voxp.android.presentation.splash.SplashState" />
 
         <variable
             name="viewModel"
-            type="ru.voxp.android.presentation.SplashViewModel" />
+            type="ru.voxp.android.presentation.splash.SplashViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/splash_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.SplashFragment">
+        tools:context=".presentation.splash.SplashFragment">
 
         <ImageView
             android:id="@+id/splash_fragment_logo"

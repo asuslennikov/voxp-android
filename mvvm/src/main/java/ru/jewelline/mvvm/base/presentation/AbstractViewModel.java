@@ -19,13 +19,12 @@ import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
  */
 public abstract class AbstractViewModel<STATE extends State> extends androidx.lifecycle.ViewModel implements ViewModel<STATE> {
     private final BehaviorSubject<STATE> statePublisher;
-    private final PublishSubject<Effect> eventPublisher;
+    private PublishSubject<Effect> effectPublisher;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private STATE currentState;
 
     public AbstractViewModel() {
         statePublisher = BehaviorSubject.create();
-        eventPublisher = PublishSubject.create();
     }
 
     /**
@@ -52,25 +51,28 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
     @NonNull
     @Override
     public Observable<STATE> getState(@Nullable STATE savedState) {
-        STATE state = getState();
-        if (savedState != null) {
-            state = mergeState(state, savedState);
-        }
+        STATE state = mergeState(currentState, savedState);
         sendState(state);
         return statePublisher;
     }
 
     /**
      * Метод объединяет значения из текущего состояния и сохраненного значения.
-     * Стандартная реализация всегда возвращает {@code savedState}.
+     * Стандартная реализация возвращает {@code savedState} только если {@code currentState} еще не был инициализирован.
      *
      * @param currentState текущее значение (значение из данного {@code ViewModel})
      * @param savedState   сохраненной значение (внешнее значение)
      * @return результат объединения двух состояний
      */
     @NonNull
-    protected STATE mergeState(@NonNull STATE currentState, @NonNull STATE savedState) {
-        return savedState;
+    protected STATE mergeState(@Nullable STATE currentState, @Nullable STATE savedState) {
+        if (currentState == null && savedState != null) {
+            return savedState;
+        }
+        if (currentState == null) {
+            currentState = buildInitialState();
+        }
+        return currentState;
     }
 
     /**
@@ -89,7 +91,10 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
     @NonNull
     @Override
     public Observable<Effect> getEffect() {
-        return eventPublisher;
+        if (effectPublisher == null) {
+            effectPublisher = PublishSubject.create();
+        }
+        return effectPublisher;
     }
 
     /**
@@ -99,8 +104,8 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
      * @param effect эффект, который необходимо применить к экрану
      */
     protected final void sendEffect(@Nullable Effect effect) {
-        if (effect != null) {
-            eventPublisher.onNext(effect);
+        if (effect != null && effectPublisher != null) {
+            effectPublisher.onNext(effect);
         }
     }
 
@@ -109,13 +114,18 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
      *
      * @param disposable объект подписки на событие
      */
-    protected void collectDisposable(Disposable disposable) {
+    protected Disposable collectDisposable(Disposable disposable) {
         this.disposable.add(disposable);
+        return disposable;
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
+        statePublisher.onComplete();
+        if (effectPublisher != null) {
+            effectPublisher.onComplete();
+        }
         disposable.clear();
     }
 }

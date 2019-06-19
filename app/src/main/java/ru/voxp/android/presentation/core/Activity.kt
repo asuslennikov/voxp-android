@@ -1,9 +1,11 @@
-package ru.voxp.android
+package ru.voxp.android.presentation.core
 
 import androidx.databinding.ViewDataBinding
 import ru.jewelline.mvvm.base.presentation.BoundActivityScreen
 import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
+import ru.voxp.android.BR
+import ru.voxp.android.VoxpApplication
 
 abstract class Activity<STATE : State, VM : ViewModel<STATE>, B : ViewDataBinding>(
     private val layoutResourceId: Int,
