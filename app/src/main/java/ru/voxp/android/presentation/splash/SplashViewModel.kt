@@ -1,4 +1,4 @@
-package ru.voxp.android.presentation
+package ru.voxp.android.presentation.splash
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 // by default view-model factory from Androidx Jetpack
 class SplashViewModel(application: Application) : AndroidViewModel(application), ViewModel<SplashState> {
 
-    private val delegate: ViewModel<SplashState> = RealSplashViewModel(application as VoxpApplication)
+    private val delegate: ViewModel<SplashState> =
+        RealSplashViewModel(application as VoxpApplication)
 
     override fun getState(savedState: SplashState?): Observable<SplashState> = delegate.getState(savedState)
 
@@ -34,22 +35,18 @@ internal class RealSplashViewModel(application: VoxpApplication) : AbstractViewM
             .filter { InitializationStatus.COMPLETE == it }
         val minAnimationDurationObservable = Observable.timer(animationDurationMillis.toLong(), MILLISECONDS)
 
-        disposable = Observable.combineLatest(
+        disposable = collectDisposable(Observable.combineLatest(
             initializationObservable,
             minAnimationDurationObservable,
             BiFunction { f: InitializationStatus, s: Long -> f })
-            .subscribe { navigateFromSplash() }
+            .subscribe { navigateFromSplash() })
     }
 
-    override fun buildInitialState(): SplashState = SplashState(true)
+    override fun buildInitialState(): SplashState =
+        SplashState(true)
 
     private fun navigateFromSplash() {
         sendState(SplashState(false))
-        disposable?.dispose()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
+        disposable.dispose()
     }
 }

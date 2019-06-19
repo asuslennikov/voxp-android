@@ -7,7 +7,8 @@ import dagger.multibindings.IntoMap
 import ru.jewelline.mvvm.base.di.AndroidXInjectableViewModelFactory
 import ru.jewelline.mvvm.base.presentation.ViewModelFactory
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
-import ru.voxp.android.presentation.LastLawsViewModel
+import ru.voxp.android.presentation.law.last.LastLawsViewModel
+import ru.voxp.android.presentation.law.card.LawCardViewModel
 import javax.inject.Provider
 
 @Module
@@ -16,7 +17,7 @@ internal abstract class ViewModelModule {
     /*
     @Binds
     @IntoMap
-    @ViewModelKey(.class)
+    @ViewModelKey(::class)
     abstract fun binds(instance: ): ViewModel<*>
     */
 
@@ -24,6 +25,11 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LastLawsViewModel::class)
     abstract fun bindsLastLawsViewModel(instance: LastLawsViewModel): ViewModel<*>
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LawCardViewModel::class)
+    abstract fun bindsLawsViewModel(instance: LawCardViewModel): ViewModel<*>
 
     @Module
     companion object {

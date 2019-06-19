@@ -1,4 +1,4 @@
-package ru.voxp.android.presentation
+package ru.voxp.android.presentation.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

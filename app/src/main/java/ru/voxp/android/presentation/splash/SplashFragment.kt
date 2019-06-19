@@ -1,10 +1,10 @@
-package ru.voxp.android.presentation
+package ru.voxp.android.presentation.splash
 
 import android.graphics.drawable.Animatable
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import ru.voxp.android.Fragment
+import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.R
 import ru.voxp.android.databinding.SplashFragmentBinding
 

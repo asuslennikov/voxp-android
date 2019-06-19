@@ -8,7 +8,7 @@
 
         <variable
             name="state"
-            type="ru.voxp.android.presentation.LawListState" />
+            type="ru.voxp.android.presentation.law.card.LawCardState" />
     </data>
 
     <LinearLayout

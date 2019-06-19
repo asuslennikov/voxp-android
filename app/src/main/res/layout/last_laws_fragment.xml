@@ -9,18 +9,18 @@
 
         <variable
             name="state"
-            type="ru.voxp.android.presentation.LastLawsState" />
+            type="ru.voxp.android.presentation.law.last.LastLawsState" />
 
         <variable
             name="viewModel"
-            type="ru.voxp.android.presentation.LastLawsViewModel" />
+            type="ru.voxp.android.presentation.law.last.LastLawsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/last_laws_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.LastLawsFragment">
+        tools:context=".presentation.law.last.LastLawsFragment">
 
         <ImageView
             android:id="@+id/last_laws_fragment_toolbar_icon"
