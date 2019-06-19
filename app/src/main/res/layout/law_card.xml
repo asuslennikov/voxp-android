@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,36 +16,43 @@
             type="ru.voxp.android.presentation.law.card.LawCardViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_item_background"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/element_default_padding"
+        app:cardElevation="@dimen/law_card_elevation">
 
-        <TextView
-            android:id="@+id/law_list_view_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{state.title}"
-            android:textStyle="bold"
-            android:visibility="@{state.titleVisible ? View.VISIBLE : View.GONE}"
-            tools:text="О внесении изменения в статью 12.36.1 Кодекса Российской Федерации об административных правонарушениях" />
+            android:orientation="vertical"
+            android:padding="@dimen/element_default_padding">
 
-        <TextView
-            android:id="@+id/law_list_view_subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{state.subtitle}"
-            android:visibility="@{state.subtitleVisible ? View.VISIBLE : View.GONE}"
-            tools:text="об усилении ответственности за нарушение правил пользования телефоном водителем транспортного средства" />
+            <TextView
+                android:id="@+id/law_list_view_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{state.title}"
+                android:textStyle="bold"
+                android:visibility="@{state.titleVisible ? View.VISIBLE : View.GONE}"
+                tools:text="О внесении изменения в статью 12.36.1 Кодекса Российской Федерации об административных правонарушениях" />
 
-        <TextView
-            android:id="@+id/law_list_view_date"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@{state.date}"
-            android:textStyle="italic"
-            android:visibility="@{state.dateVisible ? View.VISIBLE : View.GONE}"
-            tools:text="От 2019-09-20" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/law_list_view_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{state.subtitle}"
+                android:visibility="@{state.subtitleVisible ? View.VISIBLE : View.GONE}"
+                tools:text="об усилении ответственности за нарушение правил пользования телефоном водителем транспортного средства" />
+
+            <TextView
+                android:id="@+id/law_list_view_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@{state.date}"
+                android:textStyle="italic"
+                android:visibility="@{state.dateVisible ? View.VISIBLE : View.GONE}"
+                tools:text="От 2019-09-20" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
