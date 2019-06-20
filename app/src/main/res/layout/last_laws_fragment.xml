@@ -28,7 +28,6 @@
             android:layout_height="64dp"
             android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
             android:padding="@dimen/element_default_padding"
-            android:paddingStart="@dimen/element_default_padding"
             android:transitionName="last_laws_fragment_toolbar_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,21 +41,73 @@
             android:gravity="center_vertical"
             android:paddingTop="@dimen/element_default_padding"
             android:paddingEnd="@dimen/element_default_padding"
+            android:paddingRight="@dimen/element_default_padding"
             android:text="@string/last_laws_fragment_header_text"
             app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/last_laws_fragment_toolbar_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/last_laws_fragment_loader"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <RelativeLayout
+            android:id="@+id/last_laws_fragment_loader_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
             android:visibility="@{ state.loaderVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon" />
+            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+            tools:visibility="invisible">
+
+            <ProgressBar
+                android:id="@+id/last_laws_fragment_loader"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/last_laws_fragment_loader_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/last_laws_fragment_loader"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/element_default_padding"
+                android:text="@string/last_laws_fragment_loader_text" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/last_laws_fragment_no_internet_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center_vertical"
+            android:visibility="@{ state.noInternetVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+            tools:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/last_laws_fragment_no_internet_image"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                app:srcCompat="@drawable/ic_no_internet" />
+
+            <TextView
+                android:id="@+id/last_laws_fragment_no_internet_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/last_laws_fragment_no_internet_image"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:padding="@dimen/element_default_padding"
+                android:text="@string/last_laws_fragment_no_internet_text" />
+        </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/last_laws_fragment_list"
@@ -67,6 +118,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon" />
+            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+            tools:listitem="@layout/law_card"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

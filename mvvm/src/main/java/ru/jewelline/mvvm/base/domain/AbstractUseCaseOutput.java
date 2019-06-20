@@ -17,7 +17,7 @@ public abstract class AbstractUseCaseOutput implements UseCaseOutput {
      *
      * @param exception произошедшая ошибка, не может быть {@code null}
      */
-    protected void setException(@NonNull Throwable exception) {
+    public void setException(@NonNull Throwable exception) {
         this.exception = exception;
     }
 
@@ -45,7 +45,7 @@ public abstract class AbstractUseCaseOutput implements UseCaseOutput {
      *
      * @param status текущее состояние (не может быть {@code null})
      */
-    protected void setStatus(@NonNull Status status) {
+    public void setStatus(@NonNull Status status) {
         this.status = status;
     }
 

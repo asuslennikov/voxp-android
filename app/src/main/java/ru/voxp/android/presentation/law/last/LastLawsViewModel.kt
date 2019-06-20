@@ -34,7 +34,8 @@ class LastLawsViewModel @Inject constructor(
                 .subscribe {
                     when (it.status) {
                         IN_PROGRESS -> sendState(LastLawsState().apply {
-                            loaderVisible = true
+                            loaderVisible = it.connectionAvailable
+                            noInternetVisible = !it.connectionAvailable
                             lawsVisible = false
                         })
                         SUCCESS -> sendState(LastLawsState().apply {

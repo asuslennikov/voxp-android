@@ -2,6 +2,7 @@ package ru.voxp.android.di.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -11,39 +12,52 @@ import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import ru.voxp.android.BuildConfig
 import ru.voxp.android.data.api.VoxpManager
+import ru.voxp.android.data.impl.network.NetworkManagerImpl
+import ru.voxp.android.domain.api.network.NetworkManager
 
 @Module
-internal object ManagerModule {
+internal abstract class ManagerModule {
 
-    @Provides
+    @Binds
     @ManagerScope
-    fun sharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-    }
+    abstract fun bindsNetworkManager(networkManager: NetworkManagerImpl): NetworkManager
 
-    @Provides
-    @ManagerScope
-    fun okHttpClient(): OkHttpClient {
-        val builder = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = BODY
-            builder.addInterceptor(loggingInterceptor)
+    @Module
+    companion object {
+        @Provides
+        @JvmStatic
+        @ManagerScope
+        fun sharedPreferences(context: Context): SharedPreferences {
+            return context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
         }
-        return builder.build()
+
+        @Provides
+        @JvmStatic
+        @ManagerScope
+        fun okHttpClient(): OkHttpClient {
+            val builder = OkHttpClient.Builder()
+            if (BuildConfig.DEBUG) {
+                val loggingInterceptor = HttpLoggingInterceptor()
+                loggingInterceptor.level = BODY
+                builder.addInterceptor(loggingInterceptor)
+            }
+            return builder.build()
+        }
+
+        @Provides
+        @JvmStatic
+        @ManagerScope
+        fun retrofit(httpClient: OkHttpClient): Retrofit =
+            Retrofit.Builder()
+                .client(httpClient)
+                .baseUrl("http://voxp.ru")
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build()
+
+        @Provides
+        @JvmStatic
+        @ManagerScope
+        fun voxpApi(retrofit: Retrofit): VoxpManager =
+            retrofit.create(VoxpManager::class.java)
     }
-
-    @Provides
-    @ManagerScope
-    fun retrofit(httpClient: OkHttpClient): Retrofit =
-        Retrofit.Builder()
-            .client(httpClient)
-            .baseUrl("http://voxp.ru")
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build()
-
-    @Provides
-    @ManagerScope
-    fun voxpApi(retrofit: Retrofit): VoxpManager =
-        retrofit.create(VoxpManager::class.java)
 }
