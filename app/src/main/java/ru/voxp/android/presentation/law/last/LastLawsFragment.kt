@@ -1,7 +1,5 @@
 package ru.voxp.android.presentation.law.last
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +15,6 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     R.layout.last_laws_fragment,
     LastLawsViewModel::class.java
 ) {
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         sharedElementEnterTransition = TransitionSet()
@@ -62,9 +59,9 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     override fun render(screenState: LastLawsState) {
         super.render(screenState)
         (binding.lastLawsFragmentList.adapter as LawCardAdapter).setData(screenState.laws)
-        changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentList)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
         changeViewVisibility(screenState.noInternetVisible, binding.lastLawsFragmentNoInternetContainer)
+        changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentList)
     }
 
     private fun getLong(resId: Int): Long {
@@ -72,21 +69,17 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     }
 
     private fun changeViewVisibility(targetVisible: Boolean, targetView: View) {
-        val targetVisibilityState = if (targetVisible) View.VISIBLE else View.GONE
-        val currentVisibilityState = targetView.visibility
-        if (targetVisibilityState != currentVisibilityState) {
-            targetView.animate()
-                .alpha(if (targetVisible) 0f else 1.0f)
-                .setDuration(getLong(R.integer.last_law_fragment_visibility_fade_duration))
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        if (isAdded) {
-                            targetView.visibility = targetVisibilityState
-                            targetView.alpha = if (targetVisible) 1.0f else 0f
-                        }
-                    }
-                })
-                .start()
+        if ((if (targetVisible) View.VISIBLE else View.GONE) != targetView.visibility) {
+            if (targetVisible) {
+                targetView.visibility = View.VISIBLE
+                targetView.alpha = 0f
+                targetView.animate()
+                    .alpha(1f)
+                    .setDuration(getLong(R.integer.last_law_fragment_visibility_fade_duration))
+                    .start()
+            } else {
+                targetView.visibility = View.GONE
+            }
         }
     }
 }
