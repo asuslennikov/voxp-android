@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.law.last.LastLawsFragment">
 
     <data>
 
@@ -16,48 +17,58 @@
             type="ru.voxp.android.presentation.law.last.LastLawsViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/last_laws_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.law.last.LastLawsFragment">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/last_laws_fragment_toolbar_icon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
-            android:padding="@dimen/element_default_padding"
-            android:transitionName="last_laws_fragment_toolbar_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_bullhorn" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/last_laws_fragment_header"
-            style="@style/TextHeader"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center_vertical"
-            android:paddingTop="@dimen/element_default_padding"
-            android:paddingEnd="@dimen/element_default_padding"
-            android:paddingRight="@dimen/element_default_padding"
-            android:text="@string/last_laws_fragment_header_text"
-            app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/last_laws_fragment_toolbar_icon"
-            app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/last_laws_fragment_toolbar_icon"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:layout_height="@dimen/toolbar_icon_size"
+                    android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
+                    android:padding="@dimen/element_default_padding"
+                    android:transitionName="last_laws_fragment_toolbar_icon"
+                    app:srcCompat="@drawable/ic_bullhorn_toolbar" />
+
+                <TextView
+                    android:id="@+id/last_laws_fragment_header"
+                    style="@style/AppBarText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="@dimen/element_default_padding"
+                    android:paddingRight="@dimen/element_default_padding"
+                    android:text="@string/last_laws_fragment_header_text" />
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/last_laws_fragment_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:visibility="gone"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:listitem="@layout/law_card"
+            tools:visibility="visible" />
 
         <RelativeLayout
             android:id="@+id/last_laws_fragment_loader_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:visibility="@{ state.loaderVisible ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+            android:visibility="gone"
             tools:visibility="invisible">
 
             <ProgressBar
@@ -81,13 +92,9 @@
         <RelativeLayout
             android:id="@+id/last_laws_fragment_no_internet_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:visibility="@{ state.noInternetVisible ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+            android:visibility="gone"
             tools:visibility="invisible">
 
             <ImageView
@@ -108,18 +115,5 @@
                 android:padding="@dimen/element_default_padding"
                 android:text="@string/last_laws_fragment_no_internet_text" />
         </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/last_laws_fragment_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scrollbars="vertical"
-            android:visibility="@{ state.lawsVisible ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/last_laws_fragment_toolbar_icon"
-            tools:listitem="@layout/law_card"
-            tools:visibility="visible" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
