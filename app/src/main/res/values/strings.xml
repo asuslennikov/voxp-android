@@ -5,5 +5,5 @@
     <string name="last_laws_fragment_toolbar_icon_description">Иконка приложения</string>
     <string name="last_laws_fragment_header_text">Новые законопроекты</string>
     <string name="last_laws_fragment_loader_text">Ищем законопроекты</string>
-    <string name="last_laws_fragment_no_internet_text">Отсутствует подключение к интернету.\nЗагрузка начнется автоматически при подключении к интернету.</string>
+    <string name="last_laws_fragment_no_internet_text">Отсутствует подключение к интернету.\nЗагрузка начнется автоматически при появлении подключения.</string>
 </resources>
