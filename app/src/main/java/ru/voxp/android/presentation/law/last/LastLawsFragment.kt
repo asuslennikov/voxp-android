@@ -40,6 +40,11 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         return view
     }
 
+    /**
+     * clipChildren отключен в файле разметки  чтобы отрисовать элемент вне пределов родительского элемента во время анимации.
+     * После анимации перехода нам это уже не нужно. Решение обсуждается здесь:
+     * https://stackoverflow.com/questions/37512891/scene-transition-with-nested-shared-element
+     */
     private fun enableChildClippingInHierarchy(child: View, root: View?) {
         var parent = child.parent
         while (parent != null) {
