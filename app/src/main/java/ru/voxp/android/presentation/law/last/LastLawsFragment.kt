@@ -3,11 +3,11 @@ package ru.voxp.android.presentation.law.last
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.transition.ChangeBounds
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.*
 import ru.voxp.android.R
 import ru.voxp.android.databinding.LastLawsFragmentBinding
 import ru.voxp.android.presentation.core.Fragment
@@ -20,12 +20,38 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        sharedElementEnterTransition = ChangeBounds().apply {
-            duration = getLong(R.integer.last_law_fragment_shared_element_transition_duration)
-        }
+        sharedElementEnterTransition = TransitionSet()
+            .addTransition(ChangeBounds())
+            .addTransition(ChangeTransform())
+            .addListener(object : TransitionListenerAdapter() {
+                override fun onTransitionEnd(transition: Transition) {
+                    enableChildClippingInHierarchy(binding.lastLawsFragmentToolbarIcon, view)
+                }
+
+                override fun onTransitionCancel(transition: Transition) {
+                    enableChildClippingInHierarchy(binding.lastLawsFragmentToolbarIcon, view)
+                }
+            })
+            .apply {
+                duration = getLong(R.integer.last_law_fragment_shared_element_transition_duration)
+            }
         binding.lastLawsFragmentList.layoutManager = LinearLayoutManager(context)
         binding.lastLawsFragmentList.adapter = LawCardAdapter(viewModel.lawCardViewModelRegistry)
         return view
+    }
+
+    private fun enableChildClippingInHierarchy(child: View, root: View?) {
+        var parent = child.parent
+        while (parent != null) {
+            if (parent is ViewGroup) {
+                parent.clipChildren = true
+            }
+            if (parent != root) {
+                parent = parent.parent
+            } else {
+                parent = null
+            }
+        }
     }
 
     override fun render(screenState: LastLawsState) {
