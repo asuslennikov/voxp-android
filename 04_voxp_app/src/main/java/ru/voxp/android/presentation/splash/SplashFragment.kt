@@ -4,9 +4,8 @@ import android.graphics.drawable.Animatable
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.R
-import ru.voxp.android.databinding.SplashFragmentBinding
+import ru.voxp.android.presentation.core.Fragment
 
 class SplashFragment : Fragment<SplashState, SplashViewModel, SplashFragmentBinding>(
     R.layout.splash_fragment,

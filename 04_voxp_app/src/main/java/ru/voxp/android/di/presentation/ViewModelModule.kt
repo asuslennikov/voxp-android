@@ -7,8 +7,8 @@ import dagger.multibindings.IntoMap
 import ru.jewelline.mvvm.base.di.AndroidXInjectableViewModelFactory
 import ru.jewelline.mvvm.base.presentation.ViewModelFactory
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
-import ru.voxp.android.presentation.law.last.LastLawsViewModel
 import ru.voxp.android.presentation.law.card.LawCardViewModel
+import ru.voxp.android.presentation.law.last.LastLawsViewModel
 import javax.inject.Provider
 
 @Module
