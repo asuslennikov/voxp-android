@@ -4,5 +4,7 @@
     <dimen name="element_default_padding">8dp</dimen>
     <dimen name="splash_fragment_logo_margin_start">24dp</dimen>
     <dimen name="splash_fragment_logo_size">192dp</dimen>
+    <dimen name="toolbar_icon_size">56dp</dimen>
+    <dimen name="toolbar_icon_inner_padding_size">8dp</dimen>
     <dimen name="law_card_elevation">5dp</dimen>
 </resources>
