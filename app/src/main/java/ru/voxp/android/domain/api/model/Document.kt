@@ -1,4 +1,4 @@
-package ru.voxp.android.data.api.model
+package ru.voxp.android.domain.api.model
 
 class Document {
     var name: String? = null

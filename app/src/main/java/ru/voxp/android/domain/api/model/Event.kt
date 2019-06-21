@@ -1,4 +1,4 @@
-package ru.voxp.android.data.api.model
+package ru.voxp.android.domain.api.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*

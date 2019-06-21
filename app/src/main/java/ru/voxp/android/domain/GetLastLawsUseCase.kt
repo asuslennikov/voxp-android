@@ -6,7 +6,7 @@ import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.domain.UseCaseExecution
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
 import ru.voxp.android.data.api.VoxpManager
-import ru.voxp.android.data.api.model.Law
+import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.api.network.NetworkManager
 import java.util.*
 import javax.inject.Inject
