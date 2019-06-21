@@ -2,12 +2,12 @@ package ru.voxp.android
 
 import android.content.Context
 import ru.jewelline.mvvm.base.presentation.ViewModelFactory
+import ru.voxp.android.data.di.DaggerManagerComponent
+import ru.voxp.android.domain.di.DaggerUseCaseComponent
 import ru.voxp.android.di.ApplicationModule
 import ru.voxp.android.di.DaggerApplicationComponent
-import ru.voxp.android.di.data.DaggerManagerComponent
-import ru.voxp.android.di.domain.DaggerUseCaseComponent
-import ru.voxp.android.di.presentation.DaggerViewModelComponent
-import ru.voxp.android.di.presentation.ViewModelProvider
+import ru.voxp.android.presentation.di.DaggerViewModelComponent
+import ru.voxp.android.presentation.di.ViewModelProvider
 
 internal class ComponentRegistry(context: Context) {
     private var viewModelProvider: ViewModelProvider? = null
@@ -27,7 +27,7 @@ internal class ComponentRegistry(context: Context) {
             .applicationProvider(applicationProvider)
             .build()
         val useCaseProvider = DaggerUseCaseComponent.builder()
-            .managerProvider(managerProvider)
+            .useCaseDependenciesProvider(managerProvider)
             .build()
         viewModelProvider = DaggerViewModelComponent.builder()
             .applicationProvider(applicationProvider)

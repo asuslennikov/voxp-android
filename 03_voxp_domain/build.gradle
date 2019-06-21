@@ -28,6 +28,9 @@ dependencies {
     // поэтому потребовалось использовать аннотаций для корректной JSON (де-)серелизации. Указана зависимость сразу
     // на конвертер для retrofit чтобы не возиться с синхронизацией версий.
     implementation "$libraries.retrofit_jackson"
+    implementation "$libraries.androidx_annotation"
+
+    kapt "$libraries.dagger_compiler"
 }
 
 

@@ -1,4 +1,4 @@
-package ru.voxp.android.di.domain
+package ru.voxp.android.domain.di
 
 import dagger.Module
 

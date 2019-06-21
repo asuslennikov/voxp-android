@@ -1,4 +1,4 @@
-package ru.voxp.android.di.presentation
+package ru.voxp.android.presentation.di
 
 import dagger.MapKey
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel

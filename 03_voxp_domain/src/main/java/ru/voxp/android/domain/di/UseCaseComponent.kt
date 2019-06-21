@@ -1,8 +1,8 @@
-package ru.voxp.android.di
+package ru.voxp.android.domain.di
 
 import dagger.Component
 
 @UseCaseScope
-@Component(dependencies = [], modules = [UseCaseModule::class])
+@Component(dependencies = [UseCaseDependenciesProvider::class], modules = [UseCaseModule::class])
 interface UseCaseComponent : UseCaseProvider
 // no methods, it's workaround for dagger multi-dependency multi-scope issue

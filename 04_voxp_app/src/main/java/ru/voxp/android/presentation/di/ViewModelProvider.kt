@@ -1,4 +1,4 @@
-package ru.voxp.android.di.presentation
+package ru.voxp.android.presentation.di
 
 import ru.jewelline.mvvm.base.presentation.ViewModelFactory
 

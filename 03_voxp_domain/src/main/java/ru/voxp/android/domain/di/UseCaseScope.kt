@@ -1,4 +1,4 @@
-package ru.voxp.android.di
+package ru.voxp.android.domain.di
 
 import javax.inject.Scope
 import kotlin.annotation.AnnotationRetention.SOURCE

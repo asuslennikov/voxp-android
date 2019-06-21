@@ -1,4 +1,4 @@
-package ru.voxp.android.di.data
+package ru.voxp.android.data.di
 
 import android.content.Context
 import android.content.SharedPreferences

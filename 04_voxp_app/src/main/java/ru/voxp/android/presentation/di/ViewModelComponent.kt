@@ -1,9 +1,9 @@
-package ru.voxp.android.di.presentation
+package ru.voxp.android.presentation.di
 
 import dagger.Component
+import ru.voxp.android.data.di.ManagerProvider
 import ru.voxp.android.di.ApplicationProvider
-import ru.voxp.android.di.data.ManagerProvider
-import ru.voxp.android.di.domain.UseCaseProvider
+import ru.voxp.android.domain.di.UseCaseProvider
 
 @ViewModelScope
 @Component(

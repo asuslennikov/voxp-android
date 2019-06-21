@@ -7,7 +7,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import ru.voxp.android.di.data.ManagerScope
+import ru.voxp.android.data.di.ManagerScope
 import javax.inject.Inject
 
 @ManagerScope

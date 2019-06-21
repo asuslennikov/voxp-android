@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import ru.voxp.android.R
+import ru.voxp.android.databinding.SplashFragmentBinding
 import ru.voxp.android.presentation.core.Fragment
 
 class SplashFragment : Fragment<SplashState, SplashViewModel, SplashFragmentBinding>(
