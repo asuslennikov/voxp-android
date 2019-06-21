@@ -1,6 +1,6 @@
 package ru.voxp.android.di.domain
 
-import ru.voxp.android.domain.GetLastLawsUseCase
+import ru.voxp.android.domain.usecase.GetLastLawsUseCase
 
 interface UseCaseProvider {
 

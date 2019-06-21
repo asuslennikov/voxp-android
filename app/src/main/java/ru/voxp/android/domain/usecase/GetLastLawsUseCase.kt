@@ -1,4 +1,4 @@
-package ru.voxp.android.domain
+package ru.voxp.android.domain.usecase
 
 import ru.jewelline.mvvm.base.domain.AbstractUseCase
 import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
@@ -33,27 +33,36 @@ class GetLastLawsUseCase @Inject constructor(
 
     override fun doExecute(useCaseInput: EmptyUseCaseInput, execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
         if (networkManager.isConnectionAvailable()) {
-            loadFromServerAndNotify(execution)
+            getLawsFromServer(execution)
         } else {
-            execution.joinTask(
-                networkManager.connectionAvailability()
-                    .filter { it }
-                    .observeOn(useCaseScheduler)
-                    .take(1)
-                    .subscribe {
-                        execution.notify(useCaseOutput.apply {
-                            status = IN_PROGRESS
-                        })
-                        loadFromServerAndNotify(execution)
-                    }
-            )
+            awaitNetworkConnection(execution)
         }
     }
 
-    private fun loadFromServerAndNotify(execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
-        execution.notify(useCaseOutput.apply {
-            laws = voxpManager.getLastLaws().execute().body()?.laws ?: Collections.emptyList()
-        })
-        execution.completeExecution(true)
+    private fun getLawsFromServer(execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
+        execution.joinTask(
+            voxpManager.getLastLaws()
+                .subscribe { response ->
+                    execution.notify(useCaseOutput.apply {
+                        laws = response.laws ?: Collections.emptyList()
+                    })
+                    execution.completeExecution(true)
+                }
+        )
+    }
+
+    private fun awaitNetworkConnection(execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
+        execution.joinTask(
+            networkManager.connectionAvailability()
+                .filter { it }
+                .observeOn(useCaseScheduler)
+                .take(1)
+                .subscribe {
+                    execution.notify(useCaseOutput.apply {
+                        status = IN_PROGRESS
+                    })
+                    getLawsFromServer(execution)
+                }
+        )
     }
 }

@@ -1,4 +1,4 @@
-package ru.voxp.android.data.impl.network
+package ru.voxp.android.data.network
 
 import android.content.BroadcastReceiver
 import android.content.Context

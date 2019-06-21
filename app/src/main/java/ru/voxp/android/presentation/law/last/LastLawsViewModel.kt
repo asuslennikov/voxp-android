@@ -4,8 +4,8 @@ import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.SUCCESS
-import ru.voxp.android.domain.GetLastLawsUseCase
 import ru.voxp.android.domain.api.model.Law
+import ru.voxp.android.domain.usecase.GetLastLawsUseCase
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
 import ru.voxp.android.presentation.law.card.LawCardState
 import ru.voxp.android.presentation.law.card.LawCardViewModel

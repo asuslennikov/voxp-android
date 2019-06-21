@@ -5,14 +5,16 @@ import android.content.SharedPreferences
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import ru.voxp.android.BuildConfig
 import ru.voxp.android.data.api.VoxpManager
-import ru.voxp.android.data.impl.network.NetworkManagerImpl
+import ru.voxp.android.data.network.NetworkManagerImpl
 import ru.voxp.android.domain.api.network.NetworkManager
 
 @Module
@@ -52,6 +54,7 @@ internal abstract class ManagerModule {
                 .client(httpClient)
                 .baseUrl("http://voxp.ru")
                 .addConverterFactory(JacksonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .build()
 
         @Provides
