@@ -1,9 +1,7 @@
 package ru.jewelline.mvvm.base.domain;
 
-import android.util.Log;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import ru.jewelline.mvvm.BuildConfig;
 import ru.jewelline.mvvm.interfaces.domain.UseCaseInput;
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput;
 
@@ -28,9 +26,6 @@ final class UseCaseObservableOnSubscribe<IN extends UseCaseInput,
             execution.notify(useCaseOutput);
             useCase.doExecute(useCaseInput, execution);
         } catch (Throwable t) {
-            if (BuildConfig.DEBUG) {
-                Log.d("UseCaseInterceptor", "Exception during use case execution: ", t);
-            }
             execution.notifyFailure(t);
         }
         execution.completeExecution(false);

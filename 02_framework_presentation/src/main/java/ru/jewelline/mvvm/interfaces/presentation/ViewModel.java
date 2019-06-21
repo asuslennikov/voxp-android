@@ -3,11 +3,10 @@ package ru.jewelline.mvvm.interfaces.presentation;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.reactivex.Observable;
-import ru.jewelline.mvvm.interfaces.domain.UseCase;
 
 /**
  * Интерфейс обработчика события для экрана. Отвечает за логику работы экрана, хранит его состояние отдельным объектом.
- * Также осуществляет взаимодействие с domain слоем приложения (запускает {@link UseCase}).
+ * Также осуществляет взаимодействие с domain слоем приложения (запускает {@link  ru.jewelline.mvvm.interfaces.domain.UseCase}).
  * <p></p>
  * <b>Зона ответственности:</b> Управление состоянием экрана и реакция на его события
  * <p></p>

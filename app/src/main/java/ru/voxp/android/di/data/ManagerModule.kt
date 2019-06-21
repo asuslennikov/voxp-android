@@ -16,19 +16,17 @@ import ru.voxp.android.BuildConfig
 import ru.voxp.android.data.network.NetworkManagerImpl
 import ru.voxp.android.data.remote.RemoteRepositoryImpl
 import ru.voxp.android.data.remote.RetrofitRepository
-import ru.voxp.android.domain.api.network.NetworkManager
-import ru.voxp.android.domain.api.remote.RemoteRepository
 
 @Module
 internal abstract class ManagerModule {
 
     @Binds
     @ManagerScope
-    abstract fun bindsNetworkManager(networkManager: NetworkManagerImpl): NetworkManager
+    abstract fun bindsNetworkManager(networkManager: NetworkManagerImpl): ru.voxp.android.domain.api.network.NetworkManager
 
     @Binds
     @ManagerScope
-    abstract fun bindsRemoteRepository(remoteRepository: RemoteRepositoryImpl): RemoteRepository
+    abstract fun bindsRemoteRepository(remoteRepository: RemoteRepositoryImpl): ru.voxp.android.domain.api.remote.RemoteRepository
 
     @Module
     companion object {

@@ -8,13 +8,12 @@ import android.net.ConnectivityManager
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import ru.voxp.android.di.data.ManagerScope
-import ru.voxp.android.domain.api.network.NetworkManager
 import javax.inject.Inject
 
 @ManagerScope
 class NetworkManagerImpl @Inject constructor(
     private val context: Context
-) : NetworkManager {
+) : ru.voxp.android.domain.api.network.NetworkManager {
 
     private val availabilityPublisher: BehaviorSubject<Boolean>
 
