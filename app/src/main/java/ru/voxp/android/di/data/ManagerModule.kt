@@ -13,9 +13,11 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import ru.voxp.android.BuildConfig
-import ru.voxp.android.data.api.VoxpManager
 import ru.voxp.android.data.network.NetworkManagerImpl
+import ru.voxp.android.data.remote.RemoteRepositoryImpl
+import ru.voxp.android.data.remote.RetrofitRepository
 import ru.voxp.android.domain.api.network.NetworkManager
+import ru.voxp.android.domain.api.remote.RemoteRepository
 
 @Module
 internal abstract class ManagerModule {
@@ -23,6 +25,10 @@ internal abstract class ManagerModule {
     @Binds
     @ManagerScope
     abstract fun bindsNetworkManager(networkManager: NetworkManagerImpl): NetworkManager
+
+    @Binds
+    @ManagerScope
+    abstract fun bindsRemoteRepository(remoteRepository: RemoteRepositoryImpl): RemoteRepository
 
     @Module
     companion object {
@@ -60,7 +66,7 @@ internal abstract class ManagerModule {
         @Provides
         @JvmStatic
         @ManagerScope
-        fun voxpApi(retrofit: Retrofit): VoxpManager =
-            retrofit.create(VoxpManager::class.java)
+        fun retrofitRepository(retrofit: Retrofit): RetrofitRepository =
+            retrofit.create(RetrofitRepository::class.java)
     }
 }

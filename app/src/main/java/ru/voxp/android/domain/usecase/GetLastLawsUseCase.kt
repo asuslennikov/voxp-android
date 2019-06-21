@@ -5,9 +5,9 @@ import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.domain.UseCaseExecution
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
-import ru.voxp.android.data.api.VoxpManager
 import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.api.network.NetworkManager
+import ru.voxp.android.domain.api.remote.RemoteRepository
 import java.util.*
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class GetLastLawsUseCaseOutput : AbstractUseCaseOutput() {
 
 class GetLastLawsUseCase @Inject constructor(
     private val networkManager: NetworkManager,
-    private val voxpManager: VoxpManager
+    private val remoteRepository: RemoteRepository
 ) :
     AbstractUseCase<EmptyUseCaseInput, GetLastLawsUseCaseOutput>() {
 
@@ -41,7 +41,7 @@ class GetLastLawsUseCase @Inject constructor(
 
     private fun getLawsFromServer(execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
         execution.joinTask(
-            voxpManager.getLastLaws()
+            remoteRepository.getLastLaws()
                 .subscribe { response ->
                     execution.notify(useCaseOutput.apply {
                         laws = response.laws ?: Collections.emptyList()
