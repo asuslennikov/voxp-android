@@ -43,6 +43,11 @@ class LastLawsViewModel @Inject constructor(
                             lawsVisible = true
                             laws = mapLawsToState(it.laws)
                         })
+                        else -> sendState(LastLawsState().apply {
+                            loaderVisible = false
+                            noInternetVisible = false
+                            lawsVisible = false
+                        })
                     }
                 }
         )

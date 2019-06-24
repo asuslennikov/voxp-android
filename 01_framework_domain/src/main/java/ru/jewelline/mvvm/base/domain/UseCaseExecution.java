@@ -1,8 +1,10 @@
 package ru.jewelline.mvvm.base.domain;
 
 import androidx.annotation.NonNull;
+import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput;
 
 import java.util.ArrayList;
@@ -111,6 +113,20 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
             disposables = new ArrayList<>();
         }
         disposables.add(disposable);
+    }
+
+    /**
+     * Метод возвращает обработчик ошибок для {@link Observable}, который в случае срабатывания отправляет подписчику
+     * текущего выполнения сценария уведомление об ошибке. После этого, выполнение сценария и всех зависимых задач
+     * ({@link #joinTask(Disposable)}) завершается.
+     *
+     * @return обработчик ошибок в потоке ({@link Observable})
+     */
+    public Consumer<Throwable> notifyFailureOnError() {
+        return throwable -> {
+            notifyFailure(throwable);
+            completeExecution(true);
+        };
     }
 
     /**

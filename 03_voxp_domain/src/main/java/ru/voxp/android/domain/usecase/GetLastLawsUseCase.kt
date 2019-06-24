@@ -1,5 +1,6 @@
 package ru.voxp.android.domain.usecase
 
+import io.reactivex.functions.Consumer
 import ru.jewelline.mvvm.base.domain.AbstractUseCase
 import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
@@ -42,12 +43,12 @@ class GetLastLawsUseCase @Inject constructor(
     private fun getLawsFromServer(execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
         execution.joinTask(
             remoteRepository.getLastLaws()
-                .subscribe { response ->
+                .subscribe(Consumer { response ->
                     execution.notify(useCaseOutput.apply {
                         laws = response.laws ?: Collections.emptyList()
                     })
                     execution.completeExecution(true)
-                }
+                }, execution.notifyFailureOnError())
         )
     }
 
@@ -57,12 +58,12 @@ class GetLastLawsUseCase @Inject constructor(
                 .filter { it }
                 .observeOn(useCaseScheduler)
                 .take(1)
-                .subscribe {
+                .subscribe(Consumer {
                     execution.notify(useCaseOutput.apply {
                         status = IN_PROGRESS
                     })
                     getLawsFromServer(execution)
-                }
+                }, execution.notifyFailureOnError())
         )
     }
 }
