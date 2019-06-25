@@ -2,13 +2,13 @@ package ru.voxp.android.presentation.law.last
 
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
-import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
-import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.SUCCESS
-import ru.voxp.android.R
-import ru.voxp.android.domain.api.ExceptionType.*
+import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
+import ru.voxp.android.domain.api.ExceptionType.CONNECTION
+import ru.voxp.android.domain.api.ExceptionType.SERVER
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.usecase.GetLastLawsUseCase
+import ru.voxp.android.domain.usecase.GetLastLawsUseCaseOutput
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
 import ru.voxp.android.presentation.law.card.LawCardState
 import ru.voxp.android.presentation.law.card.LawCardViewModel
@@ -34,53 +34,28 @@ class LastLawsViewModel @Inject constructor(
     private fun requestLastLaws() {
         collectDisposable(
             lastLawsUseCase.execute(EmptyUseCaseInput.getInstance())
-                .subscribe {
-                    when (it.status) {
-                        IN_PROGRESS -> sendState(LastLawsState().apply {
-                            if (it.connectionAvailable) {
-                                loaderVisible = true
-                                errorPanelVisible = false
-                            } else {
-                                loaderVisible = false
-                                errorPanelVisible = true
-                                errorPanelImage = R.drawable.ic_no_internet
-                                errorPanelText = R.string.error_panel_no_internet_text
-                            }
-                            lawsVisible = false
-                        })
-                        SUCCESS -> sendState(LastLawsState().apply {
-                            loaderVisible = false
-                            errorPanelVisible = false
-                            lawsVisible = true
-                            laws = mapLawsToState(it.laws)
-                        })
-                        else -> sendState(LastLawsState().apply {
-                            loaderVisible = false
-                            errorPanelVisible = true
-                            if (it.exception != null && it.exception is VoxpException) {
-                                when ((it.exception as VoxpException).exceptionType){
-                                    CONNECTION -> {
-                                        errorPanelImage = R.drawable.ic_connection_error
-                                        errorPanelText = R.string.error_panel_connection_error_text
-                                    }
-                                    SERVER -> {
-                                        errorPanelImage = R.drawable.ic_server_error
-                                        errorPanelText = R.string.error_panel_server_error_text
-                                    }
-                                    else -> {
-                                        errorPanelImage = R.drawable.ic_device_error
-                                        errorPanelText = R.string.error_panel_device_error_text
-                                    }
-                                }
-                            } else {
-                                errorPanelImage = R.drawable.ic_device_error
-                                errorPanelText = R.string.error_panel_device_error_text
-                            }
-                            lawsVisible = false
-                        })
+                .subscribe { lastLawsOutput ->
+                    when (lastLawsOutput.status) {
+                        IN_PROGRESS -> sendState(LastLawsState.loading(lastLawsOutput.connectionAvailable))
+                        SUCCESS -> sendState(LastLawsState.laws(mapLawsToState(lastLawsOutput.laws)))
+                        FAILURE -> handleGetLastLawsFailure(lastLawsOutput)
                     }
                 }
         )
+    }
+
+    private fun handleGetLastLawsFailure(lastLawsOutput: GetLastLawsUseCaseOutput) {
+        if (lastLawsOutput.hasException() && lastLawsOutput.exception is VoxpException) {
+            sendState(
+                when ((lastLawsOutput.exception as VoxpException).exceptionType) {
+                    CONNECTION -> LastLawsState.connectionError()
+                    SERVER -> LastLawsState.serverError()
+                    else -> LastLawsState.deviceError()
+                }
+            )
+        } else {
+            sendState(LastLawsState.deviceError())
+        }
     }
 
     private fun mapLawsToState(modelLaws: List<Law>?): List<LawCardState> {
