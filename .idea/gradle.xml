@@ -8,8 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/mvvm" />
+            <option value="$PROJECT_DIR$/01_framework_domain" />
+            <option value="$PROJECT_DIR$/02_framework_presentation" />
+            <option value="$PROJECT_DIR$/03_voxp_domain" />
+            <option value="$PROJECT_DIR$/04_voxp_app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

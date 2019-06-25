@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Voxp</string>
+    <string name="splash_fragment_logo_description">Иконка загрузки приложения</string>
+    <string name="splash_fragment_loading_text">Загружаемся</string>
+    <string name="last_laws_fragment_toolbar_icon_description">Иконка приложения</string>
+    <string name="last_laws_fragment_header_text">Новые законопроекты</string>
+    <string name="last_laws_fragment_loader_text">Ищем законопроекты</string>
+    <string name="last_laws_fragment_error_panel_image_description">Иконка произошедшей ошибки</string>
+    <string name="error_panel_no_internet_text">Отсутствует подключение к интернету.\nЗагрузка начнется автоматически при появлении подключения.</string>
+    <string name="error_panel_server_error_text">На нашем сервере произошла ошибка.\nМы уже занимаемся исправлением.</string>
+    <string name="error_panel_device_error_text">Приложение не смогло :(\nПожалуйста оставьте отзыв с информацией о произошедшем.</string>
+    <string name="error_panel_connection_error_text">Проблемы с подключением.\nПроверьте связь и попробуйте снова.</string>
+</resources>

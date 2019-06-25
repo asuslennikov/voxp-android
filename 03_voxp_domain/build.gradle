@@ -1,0 +1,36 @@
+apply plugin: 'java-library'
+
+apply plugin: 'kotlin'
+
+apply plugin: 'kotlin-kapt'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    api project(':01_framework_domain')
+    implementation "$libraries.kotlin_stdlib"
+    implementation "$libraries.dagger"
+    implementation "$libraries.rxjava2"
+    // Решено использовать доменные классы в качестве классов сетевого обмена (для уменьшения кодовой базы),
+    // поэтому потребовалось использовать аннотаций для корректной JSON (де-)серелизации. Указана зависимость сразу
+    // на конвертер для retrofit чтобы не возиться с синхронизацией версий.
+    implementation "$libraries.retrofit_jackson"
+    implementation "$libraries.androidx_annotation"
+
+    kapt "$libraries.dagger_compiler"
+}
+
+

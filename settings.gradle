@@ -1,1 +1,1 @@
-include ':app', ':mvvm'
+include ':01_framework_domain', ':02_framework_presentation', ':03_voxp_domain', ':04_voxp_app'

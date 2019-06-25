@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "ru.voxp.android"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':02_framework_presentation')
+    implementation project(':03_voxp_domain')
+
+    implementation "$libraries.kotlin_stdlib"
+    implementation "$libraries.androidx_core"
+    implementation "$libraries.androidx_navigation_ui"
+    implementation "$libraries.androidx_navigation_fragment"
+    implementation "$libraries.retrofit"
+    implementation "$libraries.retrofit_jackson"
+    implementation "$libraries.retrofit_rxjava2"
+    implementation "$libraries.okhttp_logging_interceptor"
+    implementation "$libraries.androidx_appcompat"
+    implementation "$libraries.androidx_legacy"
+    implementation "$libraries.lifecycle_extensions"
+    implementation "$libraries.rxjava2"
+    implementation "$libraries.rxjava2_android"
+    implementation "$libraries.google_material"
+    implementation "$libraries.androidx_constraintlayout"
+    implementation "$libraries.androidx_recyclerview"
+    implementation "$libraries.androidx_cardview"
+    implementation "$libraries.androidx_coordinatorlayout"
+    implementation "$libraries.androidx_vectordrawable"
+    implementation "$libraries.androidx_vectordrawable_animated"
+    implementation "$libraries.dagger"
+
+    kapt "$libraries.dagger_compiler"
+
+    testImplementation "$testLibraries.junit"
+    androidTestImplementation "$testLibraries.androidx_test_core"
+    androidTestImplementation "$testLibraries.androidx_test_runner"
+    androidTestImplementation "$testLibraries.androidx_test_rules"
+    androidTestImplementation "$testLibraries.androidx_test_ext_junit"
+    androidTestImplementation "$testLibraries.androidx_test_ext_truth"
+    androidTestImplementation "$testLibraries.google_truth"
+    androidTestImplementation "$testLibraries.androidx_test_espresso"
+}
