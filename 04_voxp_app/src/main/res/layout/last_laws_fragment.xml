@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.law.last.LastLawsFragment">
 
@@ -64,7 +65,7 @@
             android:visibility="gone"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             tools:listitem="@layout/law_card"
-            tools:visibility="invisible" />
+            tools:visibility="visible" />
 
         <RelativeLayout
             android:id="@+id/last_laws_fragment_loader_container"
@@ -92,33 +93,11 @@
                 android:text="@string/last_laws_fragment_loader_text" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <include
             android:id="@+id/last_laws_fragment_error_panel_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            layout="@layout/error_panel"
             android:visibility="gone"
-            tools:visibility="visible">
-
-            <ImageView
-                android:id="@+id/last_laws_fragment_error_panel_image"
-                android:layout_width="@dimen/error_panel_icon_size"
-                android:layout_height="@dimen/error_panel_icon_size"
-                android:layout_centerHorizontal="true"
-                android:contentDescription="@string/last_laws_fragment_error_panel_image_description"
-                android:src="@{state.errorPanelImage}"
-                tools:src="@drawable/ic_no_internet" />
-
-            <TextView
-                android:id="@+id/last_laws_fragment_error_panel_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/last_laws_fragment_error_panel_image"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:padding="@dimen/element_default_padding"
-                android:text="@{state.errorPanelText}"
-                tools:text="@string/error_panel_no_internet_text" />
-        </RelativeLayout>
+            bind:state="@{state}"
+            tools:visibility="invisible" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

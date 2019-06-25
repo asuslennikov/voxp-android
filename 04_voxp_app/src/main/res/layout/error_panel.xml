@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="state"
+            type="ru.voxp.android.presentation.error.ErrorPanelState" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/error_panel_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/error_panel_image"
+            android:layout_width="@dimen/error_panel_icon_size"
+            android:layout_height="@dimen/error_panel_icon_size"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/error_panel_image_description"
+            android:src="@{state.errorPanelImage}"
+            tools:src="@drawable/ic_no_internet" />
+
+        <TextView
+            android:id="@+id/error_panel_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/error_panel_image"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/element_default_padding"
+            android:text="@{state.errorPanelText}"
+            tools:text="@string/error_panel_no_internet_text" />
+    </RelativeLayout>
+</layout>

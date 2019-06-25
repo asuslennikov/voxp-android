@@ -60,7 +60,10 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         super.render(screenState)
         (binding.lastLawsFragmentList.adapter as LawCardAdapter).setData(screenState.laws)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
-        changeViewVisibility(screenState.errorPanelVisible, binding.lastLawsFragmentErrorPanelContainer)
+        changeViewVisibility(
+            screenState.errorPanelVisible,
+            binding.lastLawsFragmentErrorPanelContainer.errorPanelContainer
+        )
         changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentList)
     }
 
