@@ -10,4 +10,5 @@
     <string name="error_panel_server_error_text">На нашем сервере произошла ошибка.\nМы уже занимаемся исправлением.</string>
     <string name="error_panel_device_error_text">Приложение не смогло :(\nПожалуйста оставьте отзыв с информацией о произошедшем.</string>
     <string name="error_panel_connection_error_text">Проблемы с подключением.\nПроверьте связь и попробуйте снова.</string>
+    <string name="error_panel_retry_action_text">Повторить</string>
 </resources>

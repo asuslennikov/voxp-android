@@ -9,3 +9,7 @@ open class ErrorPanelState : State {
     var errorPanelActionVisible: Boolean = false
     var errorPanelActionText: Int? = null
 }
+
+interface ErrorPanelViewModel {
+    fun errorPanelActionClicked()
+}

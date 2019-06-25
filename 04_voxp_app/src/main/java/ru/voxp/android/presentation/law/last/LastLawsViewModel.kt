@@ -10,6 +10,7 @@ import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.usecase.GetLastLawsUseCase
 import ru.voxp.android.domain.usecase.GetLastLawsUseCaseOutput
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
+import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
 import ru.voxp.android.presentation.law.card.LawCardViewModel
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Provider
 class LastLawsViewModel @Inject constructor(
     private val lastLawsUseCase: GetLastLawsUseCase,
     lawCardViewModelProvider: Provider<LawCardViewModel>
-) : AbstractViewModel<LastLawsState>() {
+) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
     val lawCardViewModelRegistry: ViewModelRegistry<Long, LawCardViewModel>
 
@@ -73,5 +74,9 @@ class LastLawsViewModel @Inject constructor(
             }
         }
         return result
+    }
+
+    override fun errorPanelActionClicked() {
+        requestLastLaws()
     }
 }

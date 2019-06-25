@@ -4,9 +4,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="state"
             type="ru.voxp.android.presentation.error.ErrorPanelState" />
+
+        <variable
+            name="viewModel"
+            type="ru.voxp.android.presentation.error.ErrorPanelViewModel" />
     </data>
 
     <RelativeLayout
@@ -34,5 +40,17 @@
             android:padding="@dimen/element_default_padding"
             android:text="@{state.errorPanelText}"
             tools:text="@string/error_panel_no_internet_text" />
+
+        <Button
+            android:id="@+id/error_panel_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/error_panel_text"
+            android:layout_centerHorizontal="true"
+            android:onClick="@{() -> viewModel.errorPanelActionClicked()}"
+            android:text="@{state.errorPanelActionText}"
+            android:visibility="@{state.errorPanelActionVisible ? View.VISIBLE : View.GONE}"
+            tools:text="@string/error_panel_retry_action_text"
+            tools:visibility="visible" />
     </RelativeLayout>
 </layout>

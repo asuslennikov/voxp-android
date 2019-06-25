@@ -38,7 +38,7 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     }
 
     /**
-     * clipChildren отключен в файле разметки  чтобы отрисовать элемент вне пределов родительского элемента во время анимации.
+     * clipChildren отключен в файле разметки чтобы отрисовать элемент вне пределов родительского элемента во время анимации.
      * После анимации перехода нам это уже не нужно. Решение обсуждается здесь:
      * https://stackoverflow.com/questions/37512891/scene-transition-with-nested-shared-element
      */
@@ -60,10 +60,7 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         super.render(screenState)
         (binding.lastLawsFragmentList.adapter as LawCardAdapter).setData(screenState.laws)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
-        changeViewVisibility(
-            screenState.errorPanelVisible,
-            binding.lastLawsFragmentErrorPanelContainer.errorPanelContainer
-        )
+        changeViewVisibility(screenState.errorPanelVisible, binding.lastLawsFragmentErrorPanel.errorPanelContainer)
         changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentList)
     }
 

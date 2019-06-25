@@ -45,6 +45,8 @@ class LastLawsState : ErrorPanelState() {
                 errorPanelVisible = true
                 errorPanelImage = R.drawable.ic_connection_error
                 errorPanelText = R.string.error_panel_connection_error_text
+                errorPanelActionVisible = true
+                errorPanelActionText = R.string.error_panel_retry_action_text
             }
         }
 
@@ -53,6 +55,8 @@ class LastLawsState : ErrorPanelState() {
                 errorPanelVisible = true
                 errorPanelImage = R.drawable.ic_server_error
                 errorPanelText = R.string.error_panel_server_error_text
+                errorPanelActionVisible = true
+                errorPanelActionText = R.string.error_panel_retry_action_text
             }
         }
 
@@ -61,6 +65,8 @@ class LastLawsState : ErrorPanelState() {
                 errorPanelVisible = true
                 errorPanelImage = R.drawable.ic_device_error
                 errorPanelText = R.string.error_panel_device_error_text
+                errorPanelActionVisible = true
+                errorPanelActionText = R.string.error_panel_retry_action_text
             }
         }
     }

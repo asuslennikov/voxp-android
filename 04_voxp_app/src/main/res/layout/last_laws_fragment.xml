@@ -94,10 +94,11 @@
         </RelativeLayout>
 
         <include
-            android:id="@+id/last_laws_fragment_error_panel_container"
+            android:id="@+id/last_laws_fragment_error_panel"
             layout="@layout/error_panel"
             android:visibility="gone"
             bind:state="@{state}"
+            bind:viewModel="@{viewModel}"
             tools:visibility="invisible" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
