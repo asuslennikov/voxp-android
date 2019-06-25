@@ -8,17 +8,20 @@ import android.net.ConnectivityManager
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import ru.voxp.android.data.di.ManagerScope
+import ru.voxp.android.domain.api.network.NetworkManager
 import javax.inject.Inject
 
 @ManagerScope
 class NetworkManagerImpl @Inject constructor(
     private val context: Context
-) : ru.voxp.android.domain.api.network.NetworkManager {
+) : NetworkManager {
 
     private val availabilityPublisher: BehaviorSubject<Boolean>
+    private val availabilityObservable: Observable<Boolean>
 
     init {
         availabilityPublisher = BehaviorSubject.createDefault(determineAvailabilityStatus())
+        availabilityObservable = availabilityPublisher.distinct()
         registerConnectionAvailabilityReceiver()
     }
 
@@ -41,5 +44,5 @@ class NetworkManagerImpl @Inject constructor(
         return availabilityPublisher.value!!
     }
 
-    override fun connectionAvailability(): Observable<Boolean> = availabilityPublisher
+    override fun connectionAvailability(): Observable<Boolean> = availabilityObservable
 }

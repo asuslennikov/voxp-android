@@ -1,5 +1,6 @@
 package ru.voxp.android.presentation.law.last
 
+import io.reactivex.disposables.Disposable
 import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
@@ -9,6 +10,7 @@ import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.usecase.GetLastLawsUseCase
 import ru.voxp.android.domain.usecase.GetLastLawsUseCaseOutput
+import ru.voxp.android.domain.usecase.NetworkSwitchUseCase
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
@@ -18,10 +20,12 @@ import javax.inject.Provider
 
 class LastLawsViewModel @Inject constructor(
     private val lastLawsUseCase: GetLastLawsUseCase,
+    private val networkSwitchUseCase: NetworkSwitchUseCase,
     lawCardViewModelProvider: Provider<LawCardViewModel>
 ) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
     val lawCardViewModelRegistry: ViewModelRegistry<Long, LawCardViewModel>
+    private var networkMonitoringForErrorStateDisposable: Disposable? = null
 
     init {
         lawCardViewModelRegistry = ViewModelRegistry(lawCardViewModelProvider)
@@ -33,6 +37,7 @@ class LastLawsViewModel @Inject constructor(
     }
 
     private fun requestLastLaws() {
+        cancelNetworkMonitoringForErrorState()
         collectDisposable(
             lastLawsUseCase.execute(EmptyUseCaseInput.getInstance())
                 .subscribe { lastLawsOutput ->
@@ -43,6 +48,23 @@ class LastLawsViewModel @Inject constructor(
                     }
                 }
         )
+    }
+
+    private fun startNetworkMonitoringForErrorState() {
+        // Когда отображается кнопка "Повторить" и отключают сеть, то обновление должно начаться автоматически
+        networkMonitoringForErrorStateDisposable =
+            collectDisposable(networkSwitchUseCase.execute(EmptyUseCaseInput.getInstance())
+                .filter { networkStatus -> !networkStatus.connectionAvailable }
+                .take(1)
+                .subscribe { requestLastLaws() }
+            )
+    }
+
+    private fun cancelNetworkMonitoringForErrorState() {
+        if (networkMonitoringForErrorStateDisposable?.isDisposed == false) {
+            networkMonitoringForErrorStateDisposable?.dispose()
+            networkMonitoringForErrorStateDisposable = null
+        }
     }
 
     private fun handleGetLastLawsFailure(lastLawsOutput: GetLastLawsUseCaseOutput) {
@@ -57,6 +79,7 @@ class LastLawsViewModel @Inject constructor(
         } else {
             sendState(LastLawsState.deviceError())
         }
+        startNetworkMonitoringForErrorState()
     }
 
     private fun mapLawsToState(modelLaws: List<Law>?): List<LawCardState> {

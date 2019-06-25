@@ -107,12 +107,14 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
      * Метод позволяет текущему запуску сценария дождаться завершения указанной задачи.
      *
      * @param disposable внутренняя задача, завершения которой необходимо дождаться данному запуску сценария
+     * @return переданная задача, на случай, если необходимо сохранить ссылку внутри сценария
      */
-    public void joinTask(Disposable disposable) {
+    public Disposable joinTask(Disposable disposable) {
         if (disposables == null) {
             disposables = new ArrayList<>();
         }
         disposables.add(disposable);
+        return disposable;
     }
 
     /**

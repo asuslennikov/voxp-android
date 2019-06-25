@@ -3,6 +3,7 @@ package ru.jewelline.mvvm.base.presentation;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -10,6 +11,8 @@ import ru.jewelline.mvvm.interfaces.presentation.Effect;
 import ru.jewelline.mvvm.interfaces.presentation.Screen;
 import ru.jewelline.mvvm.interfaces.presentation.State;
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Реализация {@link Screen}, связывающая его с конкретной {@link ViewModel}
@@ -57,6 +60,17 @@ public abstract class ActivityScreen<STATE extends State,
         return AndroidSchedulers.mainThread();
     }
 
+    /**
+     * Позволяет сменить стандартный интревал (в миллисекундах) фильтрации UI событий (чтобы избежать бессмысленной
+     * реакции на UI событие, которое уже было заменено на другое). Объяснение в картинках можно найти в документации
+     * к {@link Observable#throttleLatest(long, TimeUnit, boolean)}
+     *
+     * @return интервал фильтрации
+     */
+    protected long getUiThrottleIntervalInMillis() {
+        return 100L;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +84,11 @@ public abstract class ActivityScreen<STATE extends State,
             throw new IllegalStateException("Handler for this screen is not initialized");
         }
         disposable.add(viewModel.getState(null)
+                .throttleLatest(getUiThrottleIntervalInMillis(), TimeUnit.MILLISECONDS, true)
                 .observeOn(getScheduler())
                 .subscribe(this::render));
         disposable.add(viewModel.getEffect()
+                .throttleLatest(getUiThrottleIntervalInMillis(), TimeUnit.MILLISECONDS, true)
                 .observeOn(getScheduler())
                 .subscribe(this::applyEffect));
     }
