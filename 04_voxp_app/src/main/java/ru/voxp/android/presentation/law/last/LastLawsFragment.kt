@@ -60,7 +60,7 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         super.render(screenState)
         (binding.lastLawsFragmentList.adapter as LawCardAdapter).setData(screenState.laws)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
-        changeViewVisibility(screenState.noInternetVisible, binding.lastLawsFragmentNoInternetContainer)
+        changeViewVisibility(screenState.errorPanelVisible, binding.lastLawsFragmentErrorPanelContainer)
         changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentList)
     }
 
@@ -71,8 +71,8 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     private fun changeViewVisibility(targetVisible: Boolean, targetView: View) {
         if ((if (targetVisible) View.VISIBLE else View.GONE) != targetView.visibility) {
             if (targetVisible) {
-                targetView.visibility = View.VISIBLE
                 targetView.alpha = 0f
+                targetView.visibility = View.VISIBLE
                 targetView.animate()
                     .alpha(1f)
                     .setDuration(getLong(R.integer.last_law_fragment_visibility_fade_duration))

@@ -4,6 +4,9 @@ import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.IN_PROGRESS
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.SUCCESS
+import ru.voxp.android.R
+import ru.voxp.android.domain.api.ExceptionType.*
+import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.usecase.GetLastLawsUseCase
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
@@ -28,24 +31,51 @@ class LastLawsViewModel @Inject constructor(
         return LastLawsState()
     }
 
-    fun requestLastLaws() {
+    private fun requestLastLaws() {
         collectDisposable(
             lastLawsUseCase.execute(EmptyUseCaseInput.getInstance())
                 .subscribe {
                     when (it.status) {
                         IN_PROGRESS -> sendState(LastLawsState().apply {
-                            loaderVisible = it.connectionAvailable
-                            noInternetVisible = !it.connectionAvailable
+                            if (it.connectionAvailable) {
+                                loaderVisible = true
+                                errorPanelVisible = false
+                            } else {
+                                loaderVisible = false
+                                errorPanelVisible = true
+                                errorPanelImage = R.drawable.ic_no_internet
+                                errorPanelText = R.string.error_panel_no_internet_text
+                            }
                             lawsVisible = false
                         })
                         SUCCESS -> sendState(LastLawsState().apply {
                             loaderVisible = false
+                            errorPanelVisible = false
                             lawsVisible = true
                             laws = mapLawsToState(it.laws)
                         })
                         else -> sendState(LastLawsState().apply {
                             loaderVisible = false
-                            noInternetVisible = false
+                            errorPanelVisible = true
+                            if (it.exception != null && it.exception is VoxpException) {
+                                when ((it.exception as VoxpException).exceptionType){
+                                    CONNECTION -> {
+                                        errorPanelImage = R.drawable.ic_connection_error
+                                        errorPanelText = R.string.error_panel_connection_error_text
+                                    }
+                                    SERVER -> {
+                                        errorPanelImage = R.drawable.ic_server_error
+                                        errorPanelText = R.string.error_panel_server_error_text
+                                    }
+                                    else -> {
+                                        errorPanelImage = R.drawable.ic_device_error
+                                        errorPanelText = R.string.error_panel_device_error_text
+                                    }
+                                }
+                            } else {
+                                errorPanelImage = R.drawable.ic_device_error
+                                errorPanelText = R.string.error_panel_device_error_text
+                            }
                             lawsVisible = false
                         })
                     }

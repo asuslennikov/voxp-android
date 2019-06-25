@@ -24,12 +24,9 @@ class GetLastLawsUseCase @Inject constructor(
     AbstractUseCase<EmptyUseCaseInput, GetLastLawsUseCaseOutput>() {
 
     override fun getUseCaseOutput(): GetLastLawsUseCaseOutput {
-        if (!networkManager.isConnectionAvailable()) {
-            return GetLastLawsUseCaseOutput().apply {
-                connectionAvailable = false
-            }
+        return GetLastLawsUseCaseOutput().apply {
+            connectionAvailable = networkManager.isConnectionAvailable()
         }
-        return GetLastLawsUseCaseOutput()
     }
 
     override fun doExecute(useCaseInput: EmptyUseCaseInput, execution: UseCaseExecution<GetLastLawsUseCaseOutput>) {
