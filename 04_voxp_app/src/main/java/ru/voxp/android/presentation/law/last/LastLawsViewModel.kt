@@ -8,9 +8,8 @@ import ru.voxp.android.domain.api.ExceptionType.CONNECTION
 import ru.voxp.android.domain.api.ExceptionType.SERVER
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
-import ru.voxp.android.domain.usecase.GetLastLawsUseCase
-import ru.voxp.android.domain.usecase.GetLastLawsUseCaseOutput
-import ru.voxp.android.domain.usecase.NetworkSwitchUseCase
+import ru.voxp.android.domain.usecase.FetchLastLawsUseCase
+import ru.voxp.android.domain.usecase.FetchLastLawsUseCaseOutput
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
@@ -19,13 +18,12 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 class LastLawsViewModel @Inject constructor(
-    private val lastLawsUseCase: GetLastLawsUseCase,
-    private val networkSwitchUseCase: NetworkSwitchUseCase,
+    private val lastLawsUseCase: FetchLastLawsUseCase,
     lawCardViewModelProvider: Provider<LawCardViewModel>
 ) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
     val lawCardViewModelRegistry: ViewModelRegistry<Long, LawCardViewModel>
-    private var networkMonitoringForErrorStateDisposable: Disposable? = null
+    private var fetchLastLawsTask: Disposable? = null
 
     init {
         lawCardViewModelRegistry = ViewModelRegistry(lawCardViewModelProvider)
@@ -37,8 +35,8 @@ class LastLawsViewModel @Inject constructor(
     }
 
     private fun requestLastLaws() {
-        cancelNetworkMonitoringForErrorState()
-        collectDisposable(
+        cancelFetchLastLawsTask()
+        fetchLastLawsTask = collectDisposable(
             lastLawsUseCase.execute(EmptyUseCaseInput.getInstance())
                 .subscribe { lastLawsOutput ->
                     when (lastLawsOutput.status) {
@@ -50,24 +48,14 @@ class LastLawsViewModel @Inject constructor(
         )
     }
 
-    private fun startNetworkMonitoringForErrorState() {
-        // Когда отображается кнопка "Повторить" и отключают сеть, то обновление должно начаться автоматически
-        networkMonitoringForErrorStateDisposable =
-            collectDisposable(networkSwitchUseCase.execute(EmptyUseCaseInput.getInstance())
-                .filter { networkStatus -> !networkStatus.connectionAvailable }
-                .take(1)
-                .subscribe { requestLastLaws() }
-            )
-    }
-
-    private fun cancelNetworkMonitoringForErrorState() {
-        if (networkMonitoringForErrorStateDisposable?.isDisposed == false) {
-            networkMonitoringForErrorStateDisposable?.dispose()
-            networkMonitoringForErrorStateDisposable = null
+    private fun cancelFetchLastLawsTask() {
+        if (fetchLastLawsTask?.isDisposed == false) {
+            fetchLastLawsTask?.dispose()
+            fetchLastLawsTask = null
         }
     }
 
-    private fun handleGetLastLawsFailure(lastLawsOutput: GetLastLawsUseCaseOutput) {
+    private fun handleGetLastLawsFailure(lastLawsOutput: FetchLastLawsUseCaseOutput) {
         if (lastLawsOutput.hasException() && lastLawsOutput.exception is VoxpException) {
             sendState(
                 when ((lastLawsOutput.exception as VoxpException).exceptionType) {
@@ -79,7 +67,6 @@ class LastLawsViewModel @Inject constructor(
         } else {
             sendState(LastLawsState.deviceError())
         }
-        startNetworkMonitoringForErrorState()
     }
 
     private fun mapLawsToState(modelLaws: List<Law>?): List<LawCardState> {

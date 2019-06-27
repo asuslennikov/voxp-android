@@ -1,11 +1,11 @@
 package ru.voxp.android.domain.di
 
-import ru.voxp.android.domain.usecase.GetLastLawsUseCase
-import ru.voxp.android.domain.usecase.NetworkSwitchUseCase
+import ru.voxp.android.domain.usecase.FetchLastLawsUseCase
+import ru.voxp.android.domain.usecase.NetworkGoesOnlineUseCase
 
 interface UseCaseProvider {
 
-    fun getLastLawsUseCase(): GetLastLawsUseCase
+    fun fetchLastLawsUseCase(): FetchLastLawsUseCase
 
-    fun networkSwitchUseCase(): NetworkSwitchUseCase
+    fun networkGoesOnlineUseCase(): NetworkGoesOnlineUseCase
 }

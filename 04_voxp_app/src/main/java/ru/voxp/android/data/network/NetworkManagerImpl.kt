@@ -21,7 +21,7 @@ class NetworkManagerImpl @Inject constructor(
 
     init {
         availabilityPublisher = BehaviorSubject.createDefault(determineAvailabilityStatus())
-        availabilityObservable = availabilityPublisher.distinct()
+        availabilityObservable = availabilityPublisher.distinctUntilChanged()
         registerConnectionAvailabilityReceiver()
     }
 

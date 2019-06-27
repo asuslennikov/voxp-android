@@ -7,8 +7,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Класс осуществляющий взаимодействие между подписчиком и конкретным запуском сценария.
@@ -18,7 +18,7 @@ import java.util.List;
 public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
     private final AbstractUseCase<?, OUT> useCase;
     private final ObservableEmitter<OUT> emitter;
-    private List<Disposable> disposables;
+    private Map<String, Disposable> disposables;
 
     UseCaseExecution(AbstractUseCase<?, OUT> useCase, ObservableEmitter<OUT> emitter) {
         this.useCase = useCase;
@@ -34,10 +34,30 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
      *
      * @param useCaseOutput результат работы
      */
-    public void notify(@NonNull OUT useCaseOutput) {
+    private void notify(@NonNull OUT useCaseOutput) {
         if (!isCancelled()) {
             emitter.onNext(useCaseOutput);
         }
+    }
+
+    /**
+     * Метод оповещает слушателей о выполнении сценария
+     * (устанавливает статус {@link UseCaseOutput.Status#IN_PROGRESS}).
+     */
+    public void notifyProgress() {
+        OUT useCaseOutput = getUseCaseOutput();
+        notifyProgress(useCaseOutput);
+    }
+
+    /**
+     * Метод оповещает слушателей о выполнении сценария
+     * (устанавливает статус {@link UseCaseOutput.Status#IN_PROGRESS}).
+     *
+     * @param useCaseOutput предзаполненный результат выполнения сценария
+     */
+    public void notifyProgress(@NonNull OUT useCaseOutput) {
+        useCaseOutput.setStatus(UseCaseOutput.Status.IN_PROGRESS);
+        notify(useCaseOutput);
     }
 
     /**
@@ -46,6 +66,16 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
      */
     public void notifySuccess() {
         OUT useCaseOutput = getUseCaseOutput();
+        notifySuccess(useCaseOutput);
+    }
+
+    /**
+     * Метод оповещает слушателей об успешном завершении работы сценария
+     * (устанавливает статус {@link UseCaseOutput.Status#SUCCESS}).
+     *
+     * @param useCaseOutput предзаполненный результат выполнения сценария
+     */
+    public void notifySuccess(@NonNull OUT useCaseOutput) {
         useCaseOutput.setStatus(UseCaseOutput.Status.SUCCESS);
         notify(useCaseOutput);
     }
@@ -56,6 +86,17 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
      */
     public void notifyFailure() {
         OUT useCaseOutput = getUseCaseOutput();
+        useCaseOutput.setStatus(UseCaseOutput.Status.FAILURE);
+        notify(useCaseOutput);
+    }
+
+    /**
+     * Метод оповещает слушателей об ошибочном завершении работы сценария
+     * (устанавливает статус {@link UseCaseOutput.Status#FAILURE}).
+     *
+     * @param useCaseOutput предзаполненный результат выполнения сценария
+     */
+    public void notifyFailure(@NonNull OUT useCaseOutput) {
         useCaseOutput.setStatus(UseCaseOutput.Status.FAILURE);
         notify(useCaseOutput);
     }
@@ -86,7 +127,7 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
 
     private boolean hasJoinedTasks() {
         if (disposables != null && !disposables.isEmpty()) {
-            for (Disposable disposable : disposables) {
+            for (Disposable disposable : disposables.values()) {
                 if (!disposable.isDisposed()) {
                     return true;
                 }
@@ -95,9 +136,12 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
         return false;
     }
 
+    /**
+     * Завершает все связанные задачи (если есть) для текущего выполнения сценария.
+     */
     void terminateJoinedTasks() {
         if (disposables != null && !disposables.isEmpty()) {
-            for (Disposable disposable : disposables) {
+            for (Disposable disposable : disposables.values()) {
                 disposable.dispose();
             }
         }
@@ -106,21 +150,47 @@ public final class UseCaseExecution<OUT extends AbstractUseCaseOutput> {
     /**
      * Метод позволяет текущему запуску сценария дождаться завершения указанной задачи.
      *
-     * @param disposable внутренняя задача, завершения которой необходимо дождаться данному запуску сценария
+     * @param uniqueTaskName уникальный идентификатор задачи. В случае, если для данного выполнения сценария
+     *                       уже зарегистрирована задача с таким идентификатором, будет выбрашено исключени
+     *                       {@link IllegalArgumentException}.
+     * @param disposable     внутренняя задача, завершения которой необходимо дождаться данному запуску сценария
      * @return переданная задача, на случай, если необходимо сохранить ссылку внутри сценария
      */
-    public Disposable joinTask(Disposable disposable) {
+    @NonNull
+    public Disposable joinTask(@NonNull String uniqueTaskName, @NonNull Disposable disposable) {
         if (disposables == null) {
-            disposables = new ArrayList<>();
+            disposables = new ConcurrentHashMap<>();
+        } else {
+            Disposable oldTask = disposables.get(uniqueTaskName);
+            if (oldTask != null && !oldTask.isDisposed()) {
+                throw new IllegalArgumentException("Task name must be unique for concrete execution.");
+            }
         }
-        disposables.add(disposable);
+        disposables.put(uniqueTaskName, disposable);
         return disposable;
+    }
+
+    /**
+     * Метод заверщает выполнение связанной задачи.
+     *
+     * @param uniqueTaskName уникальный идентификатор задачи.
+     * @return {@code true} если связанная задача с таким идентификатором была найде выполняющейся и остановлена.
+     */
+    public boolean cancelTask(@NonNull String uniqueTaskName) {
+        Disposable disposable = disposables.get(uniqueTaskName);
+        if (disposable == null || disposable.isDisposed()) {
+            return false;
+        }
+        disposable.dispose();
+        // Может оказаться, что это была последняя связанная заадча, токда нужно завершить выполнение сценария
+        completeExecution(false);
+        return true;
     }
 
     /**
      * Метод возвращает обработчик ошибок для {@link Observable}, который в случае срабатывания отправляет подписчику
      * текущего выполнения сценария уведомление об ошибке. После этого, выполнение сценария и всех зависимых задач
-     * ({@link #joinTask(Disposable)}) завершается.
+     * ({@link #joinTask(String, Disposable)}) завершается.
      *
      * @return обработчик ошибок в потоке ({@link Observable})
      */

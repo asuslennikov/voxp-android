@@ -45,7 +45,7 @@ public abstract class AbstractUseCaseOutput implements UseCaseOutput {
      *
      * @param status текущее состояние (не может быть {@code null})
      */
-    public void setStatus(@NonNull Status status) {
+    protected void setStatus(@NonNull Status status) {
         this.status = status;
     }
 
@@ -58,5 +58,4 @@ public abstract class AbstractUseCaseOutput implements UseCaseOutput {
     public Status getStatus() {
         return status;
     }
-
 }
