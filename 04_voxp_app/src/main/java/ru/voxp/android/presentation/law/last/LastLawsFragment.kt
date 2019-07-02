@@ -61,7 +61,8 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         (binding.lastLawsFragmentList.adapter as LawCardAdapter).setData(screenState.laws)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
         changeViewVisibility(screenState.errorPanelVisible, binding.lastLawsFragmentErrorPanel.errorPanelContainer)
-        changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentList)
+        changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentSwipeRefresh)
+        binding.lastLawsFragmentSwipeRefresh.isRefreshing = false
     }
 
     private fun getLong(resId: Int): Long {

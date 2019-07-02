@@ -86,6 +86,10 @@ class LastLawsViewModel @Inject constructor(
         return result
     }
 
+    fun lastLawsRefreshSwiped() {
+        requestLastLaws()
+    }
+
     override fun errorPanelActionClicked() {
         requestLastLaws()
     }

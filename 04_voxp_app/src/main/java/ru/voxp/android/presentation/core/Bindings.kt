@@ -4,6 +4,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 
 object Bindings {
 
@@ -25,5 +27,11 @@ object Bindings {
         } else {
             view.text = ""
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:refresh")
+    fun bindSwipeRefreshLayoutListener(view: SwipeRefreshLayout, listener: OnRefreshListener?) {
+        view.setOnRefreshListener(listener)
     }
 }
