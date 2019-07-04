@@ -1,24 +1,25 @@
 package ru.voxp.android.presentation.core.recycler
 
-import androidx.recyclerview.widget.RecyclerView.Adapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import ru.jewelline.mvvm.interfaces.HasKey
 import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 
 abstract class AbstractRecyclerViewAdapter<KEY, STATE, VM : ViewModel<STATE>, SCREEN : BoundRecyclerViewHolder<STATE, VM>>
 constructor(private val viewModelRegistry: ViewModelRegistry<KEY, VM>) :
-    Adapter<SCREEN>() where STATE : State, STATE : HasKey<KEY> {
+    ListAdapter<STATE, SCREEN>(object : DiffUtil.ItemCallback<STATE>() {
+        override fun areItemsTheSame(oldItem: STATE, newItem: STATE): Boolean {
+            return oldItem.key == newItem.key
+        }
 
-    private lateinit var content: List<STATE>
-
-    fun setData(items: List<STATE>) {
-        content = items
-    }
-
-    override fun getItemCount(): Int = content.size
+        override fun areContentsTheSame(oldItem: STATE, newItem: STATE): Boolean {
+            return areItemsTheSame(oldItem, newItem)
+        }
+    }) where STATE : State, STATE : HasKey<KEY> {
 
     override fun onBindViewHolder(holder: SCREEN, position: Int) {
-        val state = content[position]
+        val state = getItem(position)
         val viewModel = viewModelRegistry.getModel(state.key)
         holder.bindHolder(Pair(state, viewModel))
     }

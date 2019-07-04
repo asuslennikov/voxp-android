@@ -58,7 +58,7 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
 
     override fun render(screenState: LastLawsState) {
         super.render(screenState)
-        (binding.lastLawsFragmentList.adapter as LawCardAdapter).setData(screenState.laws)
+        (binding.lastLawsFragmentList.adapter as LawCardAdapter).submitList(screenState.laws)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
         changeViewVisibility(screenState.errorPanelVisible, binding.lastLawsFragmentErrorPanel.errorPanelContainer)
         changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentSwipeRefresh)
