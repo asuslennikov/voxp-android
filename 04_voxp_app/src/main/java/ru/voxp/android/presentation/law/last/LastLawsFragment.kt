@@ -1,12 +1,16 @@
 package ru.voxp.android.presentation.law.last
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.State
 import androidx.transition.*
 import ru.voxp.android.R
+import ru.voxp.android.R.integer
 import ru.voxp.android.databinding.LastLawsFragmentBinding
 import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.presentation.law.card.LawCardAdapter
@@ -17,6 +21,12 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
 ) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
+        configureFragmentAnimation(view)
+        configureLawsList()
+        return view
+    }
+
+    private fun configureFragmentAnimation(view: View?) {
         sharedElementEnterTransition = TransitionSet()
             .addTransition(ChangeBounds())
             .addTransition(ChangeTransform())
@@ -30,11 +40,26 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
                 }
             })
             .apply {
-                duration = getLong(R.integer.last_law_fragment_shared_element_transition_duration)
+                duration = getLong(integer.last_law_fragment_shared_element_transition_duration)
             }
+    }
+
+    private fun configureLawsList() {
         binding.lastLawsFragmentList.layoutManager = LinearLayoutManager(context)
+        binding.lastLawsFragmentList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
+                val padding = resources.getDimension(R.dimen.element_default_padding).toInt()
+                with(outRect) {
+                    if (parent.getChildAdapterPosition(view) == 0) {
+                        top = padding
+                    }
+                    left = padding
+                    right = padding
+                    bottom = padding
+                }
+            }
+        })
         binding.lastLawsFragmentList.adapter = LawCardAdapter(viewModel.lawCardViewModelRegistry)
-        return view
     }
 
     /**
