@@ -1,18 +1,18 @@
 package ru.voxp.android.presentation.law.last
 
+import androidx.paging.PagedList
 import ru.voxp.android.R
 import ru.voxp.android.presentation.error.ErrorPanelState
 import ru.voxp.android.presentation.law.card.LawCardState
-import java.util.*
 
 class LastLawsState : ErrorPanelState() {
     var loaderVisible: Boolean = false
     var lawsVisible: Boolean = false
-    var laws: List<LawCardState> = Collections.emptyList()
+    var laws: PagedList<LawCardState>? = null
 
     companion object {
 
-        fun laws(laws: List<LawCardState>): LastLawsState {
+        fun laws(laws: PagedList<LawCardState>): LastLawsState {
             return LastLawsState().apply {
                 lawsVisible = true
                 this.laws = laws

@@ -4,5 +4,5 @@ import io.reactivex.Observable
 import ru.voxp.android.domain.api.model.ResponseContainer
 
 interface RemoteRepository {
-    fun getLastLaws(): Observable<ResponseContainer>
+    fun getLastLaws(page: Int?, limit: Int?): Observable<ResponseContainer>
 }

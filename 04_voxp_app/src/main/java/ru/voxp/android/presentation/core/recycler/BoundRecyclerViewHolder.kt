@@ -16,16 +16,18 @@ open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemVie
     private val binding: ViewDataBinding? = DataBindingUtil.bind(itemView)
     private val disposable: CompositeDisposable = CompositeDisposable()
 
-    internal fun bindHolder(bindingInformation: Pair<STATE, VM>) {
+    internal fun bindHolder(bindingInformation: Pair<STATE, VM>?) {
         disposable.clear()
-        binding?.setVariable(getBindingViewModelVariableId(), bindingInformation.second)
-        disposable.add(bindingInformation.second
-            .getState(bindingInformation.first)
-            .subscribe { this.render(it) })
-        if (holderSupportsEffects()) {
-            disposable.addAll(bindingInformation.second
-                .getEffect()
-                .subscribe { this.applyEffect(it) })
+        if (bindingInformation != null) {
+            binding?.setVariable(getBindingViewModelVariableId(), bindingInformation.second)
+            disposable.add(bindingInformation.second
+                .getState(bindingInformation.first)
+                .subscribe { this.render(it) })
+            if (holderSupportsEffects()) {
+                disposable.addAll(bindingInformation.second
+                    .getEffect()
+                    .subscribe { this.applyEffect(it) })
+            }
         }
     }
 
