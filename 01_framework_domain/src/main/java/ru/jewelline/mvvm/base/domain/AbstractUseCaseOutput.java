@@ -15,9 +15,9 @@ public abstract class AbstractUseCaseOutput implements UseCaseOutput {
     /**
      * Метод сохраняет ошибку, произошедшую в сценарии бизнес-логики.
      *
-     * @param exception произошедшая ошибка, не может быть {@code null}
+     * @param exception произошедшая ошибка
      */
-    public void setException(@NonNull Throwable exception) {
+    public void setException(@Nullable Throwable exception) {
         this.exception = exception;
     }
 

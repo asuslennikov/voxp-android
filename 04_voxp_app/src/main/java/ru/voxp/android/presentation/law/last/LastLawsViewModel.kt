@@ -11,9 +11,10 @@ import ru.voxp.android.domain.api.ExceptionType.CONNECTION
 import ru.voxp.android.domain.api.ExceptionType.SERVER
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
-import ru.voxp.android.domain.usecase.FetchLastLawsUseCase
-import ru.voxp.android.domain.usecase.FetchLastLawsUseCaseInput
-import ru.voxp.android.domain.usecase.FetchLastLawsUseCaseOutput
+import ru.voxp.android.domain.usecase.FetchLawsNetworkAwareUseCase
+import ru.voxp.android.domain.usecase.FetchLawsUseCase
+import ru.voxp.android.domain.usecase.FetchLawsUseCaseInput
+import ru.voxp.android.domain.usecase.FetchLawsUseCaseOutput
 import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
@@ -22,7 +23,8 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 class LastLawsViewModel @Inject constructor(
-    private val lastLawsUseCase: FetchLastLawsUseCase,
+    private val fetchLawsUseCase: FetchLawsUseCase,
+    private val fetchLawsNetworkAwareUseCase: FetchLawsNetworkAwareUseCase,
     lawCardViewModelProvider: Provider<LawCardViewModel>
 ) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
@@ -41,19 +43,19 @@ class LastLawsViewModel @Inject constructor(
     private fun requestLastLaws() {
         cancelFetchLastLawsTask()
         fetchLastLawsTask = collectDisposable(
-            lastLawsUseCase.execute(FetchLastLawsUseCaseInput(0, 20))
-                .subscribe { lastLawsOutput ->
-                    when (lastLawsOutput.status) {
-                        IN_PROGRESS -> sendState(LastLawsState.loading(lastLawsOutput.connectionAvailable))
+            fetchLawsNetworkAwareUseCase.execute(FetchLawsUseCaseInput(0, 20))
+                .subscribe { result ->
+                    when (result.status) {
+                        IN_PROGRESS -> sendState(LastLawsState.loading(result.connectionAvailable))
                         SUCCESS -> sendState(
                             LastLawsState.laws(
                                 mapLawsToPagedList(
-                                    lastLawsOutput.laws,
-                                    lastLawsOutput.total
+                                    result.laws,
+                                    result.total
                                 )
                             )
                         )
-                        FAILURE -> handleGetLastLawsFailure(lastLawsOutput)
+                        FAILURE -> handleGetLastLawsFailure(result)
                     }
                 }
         )
@@ -66,10 +68,10 @@ class LastLawsViewModel @Inject constructor(
         }
     }
 
-    private fun handleGetLastLawsFailure(lastLawsOutput: FetchLastLawsUseCaseOutput) {
-        if (lastLawsOutput.hasException() && lastLawsOutput.exception is VoxpException) {
+    private fun handleGetLastLawsFailure(lawsOutput: FetchLawsUseCaseOutput) {
+        if (lawsOutput.hasException() && lawsOutput.exception is VoxpException) {
             sendState(
-                when ((lastLawsOutput.exception as VoxpException).exceptionType) {
+                when ((lawsOutput.exception as VoxpException).exceptionType) {
                     CONNECTION -> LastLawsState.connectionError()
                     SERVER -> LastLawsState.serverError()
                     else -> LastLawsState.deviceError()
@@ -88,7 +90,7 @@ class LastLawsViewModel @Inject constructor(
             .build()
     }
 
-    private fun mapLawsToPagedList(modelLaws: List<Law>?, total: Long): PagedList<LawCardState> {
+    private fun mapLawsToPagedList(modelLaws: List<Law>?, total: Int): PagedList<LawCardState> {
         val result = mapLawsToState(modelLaws)
 
         return PagedList.Builder<Int, LawCardState>(LawsDataSource(result, total), pageListConfig())
@@ -124,22 +126,23 @@ class LastLawsViewModel @Inject constructor(
 
     inner class LawsDataSource(
         private val initialLaws: List<LawCardState>,
-        private val total: Long
+        private val total: Int
     ) :
         PositionalDataSource<LawCardState>() {
         override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<LawCardState>) {
-            collectDisposable(lastLawsUseCase.execute(FetchLastLawsUseCaseInput(params.startPosition, params.loadSize))
-                .subscribe { lastLawsOutput ->
-                    when (lastLawsOutput.status) {
-                        SUCCESS -> callback.onResult(mapLawsToState(lastLawsOutput.laws))
-                        FAILURE -> handleGetLastLawsFailure(lastLawsOutput)
+            collectDisposable(
+                fetchLawsUseCase.execute(FetchLawsUseCaseInput(params.startPosition, params.loadSize))
+                    .subscribe { result ->
+                        when (result.status) {
+                            SUCCESS -> callback.onResult(mapLawsToState(result.laws))
+                            FAILURE -> handleGetLastLawsFailure(result)
                     }
                 }
             )
         }
 
         override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<LawCardState>) {
-            callback.onResult(initialLaws, 0, total.toInt())
+            callback.onResult(initialLaws, 0, total)
         }
     }
 }
