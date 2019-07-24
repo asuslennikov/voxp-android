@@ -5,4 +5,4 @@ import kotlin.annotation.AnnotationRetention.SOURCE
 
 @Scope
 @Retention(SOURCE)
-internal annotation class ViewModelScope
+internal annotation class PresentationScope

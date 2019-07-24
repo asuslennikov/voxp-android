@@ -3,16 +3,14 @@ package ru.jewelline.mvvm.base.di;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import ru.jewelline.mvvm.base.presentation.ViewModelFactory;
+import ru.jewelline.mvvm.base.presentation.ViewModelProvider;
 import ru.jewelline.mvvm.interfaces.presentation.Screen;
 import ru.jewelline.mvvm.interfaces.presentation.State;
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
-import java.util.Map;
 
 /**
  * Данный класс представляет собой фабрику по созданию экземпляров {@link ViewModel}.
@@ -22,12 +20,12 @@ import java.util.Map;
  *
  * @see androidx.lifecycle.ViewModelProvider.NewInstanceFactory
  */
-public final class AndroidXInjectableViewModelFactory extends ViewModelProvider.NewInstanceFactory implements ViewModelFactory {
-    private final Map<Class<? extends ViewModel>, Provider<ViewModel>> instances;
+public final class AndroidXViewModelProvider extends androidx.lifecycle.ViewModelProvider.NewInstanceFactory implements ViewModelProvider {
+    private final ViewModelFactory instanceProvider;
 
     @Inject
-    public AndroidXInjectableViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> instances) {
-        this.instances = instances;
+    public AndroidXViewModelProvider(ViewModelFactory instanceProvider) {
+        this.instanceProvider = instanceProvider;
     }
 
     @NonNull
@@ -38,8 +36,7 @@ public final class AndroidXInjectableViewModelFactory extends ViewModelProvider.
     }
 
     @SuppressWarnings("unchecked")
-    private <STATE extends State, VM extends androidx.lifecycle.ViewModel & ViewModel<STATE>>
-    Class<VM> checkAndCastClass(Class<?> candidateClass) {
+    private <VM extends ViewModel> Class<VM> checkAndCastClass(Class<?> candidateClass) {
         if (!(ViewModel.class.isAssignableFrom(candidateClass))) {
             throw new IllegalArgumentException("Passed view-model class actually is not a ViewModel class");
         }
@@ -61,11 +58,12 @@ public final class AndroidXInjectableViewModelFactory extends ViewModelProvider.
 
     @NonNull
     @Override
-    public <T extends androidx.lifecycle.ViewModel> T create(@NonNull Class<T> modelClass) {
-        Provider<ViewModel> viewModelProvider = instances.get(checkAndCastClass(modelClass));
-        if (viewModelProvider == null) {
-            return super.create(modelClass);
+    public <T extends androidx.lifecycle.ViewModel> T create(@NonNull Class<T> androidXModelClass) {
+        Class<ViewModel<?>> frameworkViewModelClass = checkAndCastClass(androidXModelClass);
+        ViewModel<?> viewModel = instanceProvider.create(frameworkViewModelClass);
+        if (viewModel == null) {
+            return super.create(androidXModelClass);
         }
-        return modelClass.cast(viewModelProvider.get());
+        return androidXModelClass.cast(viewModel);
     }
 }

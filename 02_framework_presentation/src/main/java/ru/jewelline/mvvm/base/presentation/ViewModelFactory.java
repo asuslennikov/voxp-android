@@ -1,15 +1,18 @@
 package ru.jewelline.mvvm.base.presentation;
 
-import androidx.annotation.NonNull;
-import ru.jewelline.mvvm.interfaces.presentation.Screen;
-import ru.jewelline.mvvm.interfaces.presentation.State;
+import androidx.annotation.Nullable;
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
 
 /**
- * Интерфейс описывает фабрику по созданию {@link ViewModel}.
+ * Фабрика по созданию и инициализации новых экземпляров {@link ViewModel}
  */
 public interface ViewModelFactory {
-
-    @NonNull
-    <STATE extends State, VM extends ViewModel<STATE>> VM getViewModel(@NonNull Screen<STATE> screen, @NonNull Class<VM> viewModelClass);
+    /**
+     * Создание инстанса viewModel по его классу и его инициализация. Если фабрика не может создать экземпляр для переданного класса, то возвращается {@code null}.
+     *
+     * @param viewModelClass
+     * @return проинициализированный экземпляр объекта viewModel, либо {@code null}
+     */
+    @Nullable
+    <VM extends ViewModel<?>> VM create(Class<VM> viewModelClass);
 }

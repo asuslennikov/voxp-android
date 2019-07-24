@@ -13,8 +13,8 @@ abstract class Activity<STATE : State, VM : ViewModel<STATE>, B : ViewDataBindin
 ) : BoundActivityScreen<STATE, VM, B>() {
 
     override fun createViewModel(): VM {
-        val viewModelFactory = (applicationContext as VoxpApplication).viewModelFactory
-        return viewModelFactory.getViewModel(this, viewModelClass)
+        val viewModelProvider = (applicationContext as VoxpApplication).viewModelProvider
+        return viewModelProvider.getViewModel(this, viewModelClass)
     }
 
     override fun getLayoutResourceId(): Int {

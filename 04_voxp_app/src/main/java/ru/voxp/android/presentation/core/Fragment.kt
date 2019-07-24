@@ -13,7 +13,7 @@ abstract class Fragment<STATE : State, VM : ViewModel<STATE>, B : ViewDataBindin
 ) : BoundFragmentScreen<STATE, VM, B>() {
 
     override fun createViewModel(): VM {
-        val viewModelFactory = (context!!.applicationContext as VoxpApplication).viewModelFactory
+        val viewModelFactory = (context!!.applicationContext as VoxpApplication).viewModelProvider
         return viewModelFactory.getViewModel(this, viewModelClass)
     }
 
