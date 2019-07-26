@@ -50,8 +50,8 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
 
     @NonNull
     @Override
-    public Observable<STATE> getState(@Nullable STATE savedState) {
-        STATE state = mergeState(currentState, savedState);
+    public Observable<STATE> getState(@NonNull Screen<STATE> screen) {
+        STATE state = mergeState(currentState, screen.getSavedState());
         sendState(state);
         return statePublisher;
     }
@@ -90,7 +90,7 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
 
     @NonNull
     @Override
-    public Observable<Effect> getEffect() {
+    public Observable<Effect> getEffect(@NonNull Screen<STATE> ignoredScreen) {
         if (effectPublisher == null) {
             effectPublisher = PublishSubject.create();
         }

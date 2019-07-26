@@ -6,7 +6,9 @@ import androidx.paging.PagedList
 import androidx.paging.PositionalDataSource
 import io.reactivex.disposables.Disposable
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
+import ru.jewelline.mvvm.base.presentation.ViewModelFactory
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
+import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.domain.api.ExceptionType.CONNECTION
 import ru.voxp.android.domain.api.ExceptionType.SERVER
 import ru.voxp.android.domain.api.VoxpException
@@ -15,7 +17,8 @@ import ru.voxp.android.domain.usecase.FetchLawsNetworkAwareUseCase
 import ru.voxp.android.domain.usecase.FetchLawsUseCase
 import ru.voxp.android.domain.usecase.FetchLawsUseCaseInput
 import ru.voxp.android.domain.usecase.FetchLawsUseCaseOutput
-import ru.voxp.android.presentation.core.recycler.ViewModelRegistry
+import ru.voxp.android.presentation.core.recycler.ViewModelByStateProvider
+import ru.voxp.android.presentation.error.ErrorPanelState
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
 import ru.voxp.android.presentation.law.card.LawCardViewModel
@@ -25,14 +28,16 @@ import javax.inject.Provider
 class LastLawsViewModel @Inject constructor(
     private val fetchLawsUseCase: FetchLawsUseCase,
     private val fetchLawsNetworkAwareUseCase: FetchLawsNetworkAwareUseCase,
-    lawCardViewModelProvider: Provider<LawCardViewModel>
+    viewModelFactory: ViewModelFactory
 ) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
-    val lawCardViewModelRegistry: ViewModelRegistry<Long, LawCardViewModel>
+    val viewModelByStateProvider: ViewModelByStateProvider
     private var fetchLastLawsTask: Disposable? = null
 
     init {
-        lawCardViewModelRegistry = ViewModelRegistry(lawCardViewModelProvider)
+        viewModelByStateProvider = ViewModelByStateProvider(viewModelFactory)
+            .registerMapping(LawCardState::class, LawCardViewModel::class)
+            .registerMapping(ErrorPanelState::class, Provider { this as ViewModel<ErrorPanelState>})
         requestLastLaws()
     }
 
@@ -136,8 +141,8 @@ class LastLawsViewModel @Inject constructor(
                         when (result.status) {
                             SUCCESS -> callback.onResult(mapLawsToState(result.laws))
                             FAILURE -> handleGetLastLawsFailure(result)
+                        }
                     }
-                }
             )
         }
 

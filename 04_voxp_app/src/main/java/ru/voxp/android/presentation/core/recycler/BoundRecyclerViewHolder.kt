@@ -15,17 +15,19 @@ open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemVie
     Screen<STATE> {
     private val binding: ViewDataBinding? = DataBindingUtil.bind(itemView)
     private val disposable: CompositeDisposable = CompositeDisposable()
+    private var state: STATE? = null
 
     internal fun bindHolder(bindingInformation: Pair<STATE, VM>?) {
         disposable.clear()
         if (bindingInformation != null) {
+            state = bindingInformation.first
             binding?.setVariable(getBindingViewModelVariableId(), bindingInformation.second)
             disposable.add(bindingInformation.second
-                .getState(bindingInformation.first)
+                .getState(this)
                 .subscribe { this.render(it) })
             if (holderSupportsEffects()) {
                 disposable.addAll(bindingInformation.second
-                    .getEffect()
+                    .getEffect(this)
                     .subscribe { this.applyEffect(it) })
             }
         }
@@ -62,5 +64,9 @@ open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemVie
 
     override fun applyEffect(screenEffect: Effect) {
         // do nothing by default
+    }
+
+    override fun getSavedState(): STATE? {
+        return state
     }
 }

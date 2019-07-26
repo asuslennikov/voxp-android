@@ -24,6 +24,7 @@ import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
 public abstract class BoundActivityScreen<STATE extends State, VM extends ViewModel<STATE>,
         B extends ViewDataBinding> extends ActivityScreen<STATE, VM> {
 
+    private static final int NO_ACTUAL_ID = 0;
     private B binding;
 
     /**
@@ -52,6 +53,17 @@ public abstract class BoundActivityScreen<STATE extends State, VM extends ViewMo
     protected abstract int getBindingViewModelVariableId();
 
     /**
+     * Возвращает идентификатор переменной биндинга для экрана. Необходимо для корректной работы
+     * метода {@link ViewDataBinding#setVariable(int, Object)}. Может потребоваться когда одна {@link ViewModel}
+     * обрабатывает несколько экранов и требуется передать текущий экран в качестве аргумента для обработчика UI события
+     *
+     * @return идентификатор переменной биндинга для экрана
+     */
+    protected int getBindingScreenVariableId() {
+        return NO_ACTUAL_ID;
+    }
+
+    /**
      * Метод возвращает экземпляр data-binding'a для данного экрана.
      *
      * @return экземпляр data-binding'a
@@ -68,11 +80,16 @@ public abstract class BoundActivityScreen<STATE extends State, VM extends ViewMo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, getLayoutResourceId());
+        int screenVariableId = getBindingScreenVariableId();
+        if (NO_ACTUAL_ID != screenVariableId){
+            binding.setVariable(screenVariableId, this);
+        }
         binding.setVariable(getBindingViewModelVariableId(), getViewModel());
     }
 
     @Override
     public void render(@NonNull STATE screenState) {
+        super.render(screenState);
         binding.setVariable(getBindingStateVariableId(), screenState);
     }
 

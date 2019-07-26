@@ -7,7 +7,7 @@ import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 
 abstract class AbstractRecyclerViewAdapter<KEY, STATE, VM : ViewModel<STATE>, SCREEN : BoundRecyclerViewHolder<STATE, VM>>
-constructor(private val viewModelRegistry: ViewModelRegistry<KEY, VM>) :
+constructor(private val viewModelProvider: ViewModelByStateProvider) :
     PagedListAdapter<STATE, SCREEN>(object : DiffUtil.ItemCallback<STATE>() {
         override fun areItemsTheSame(oldItem: STATE, newItem: STATE): Boolean {
             return oldItem.key == newItem.key
@@ -21,7 +21,7 @@ constructor(private val viewModelRegistry: ViewModelRegistry<KEY, VM>) :
     override fun onBindViewHolder(holder: SCREEN, position: Int) {
         val state = getItem(position)
         if (state != null) {
-            val viewModel = viewModelRegistry.getModel(state.key)
+            val viewModel = viewModelProvider.getViewModel(state) as VM
             holder.bindHolder(Pair(state, viewModel))
         }
         holder.bindHolder(null)

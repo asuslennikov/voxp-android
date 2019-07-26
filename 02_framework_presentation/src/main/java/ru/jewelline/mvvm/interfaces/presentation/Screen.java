@@ -2,6 +2,7 @@ package ru.jewelline.mvvm.interfaces.presentation;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Интерфейс для взаимодейтсвия с экраном.
@@ -21,6 +22,15 @@ import androidx.annotation.NonNull;
 public interface Screen<STATE extends State> {
 
     /**
+     * Метод позволяет вернуть текущее сохраненное состояние экрана. Например, восстановить после пересоздания activity.
+     * Как правило используется для начальной инициализации {@link ViewModel}.
+     *
+     * @return текущее сохраненное состояние экрана, может быть {@code null}
+     */
+    @Nullable
+    STATE getSavedState();
+
+    /**
      * Запускает перерисовку экрана в соответствии с переданным состоянием.
      * Вызов метода должен осуществляться из {@code main} потока, т.к. в методе может происходить
      * взаимодействие с иерархией {@link android.view.View}.
@@ -36,4 +46,5 @@ public interface Screen<STATE extends State> {
      * @param screenEffect определенный эффект, о котором известно данному экрану
      */
     void applyEffect(@NonNull Effect screenEffect);
+
 }

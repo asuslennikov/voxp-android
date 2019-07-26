@@ -1,7 +1,9 @@
 package ru.jewelline.mvvm.base.presentation;
 
 import android.os.Bundle;
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
@@ -24,8 +26,11 @@ import java.util.concurrent.TimeUnit;
 public abstract class ActivityScreen<STATE extends State,
         VM extends ViewModel<STATE>> extends AppCompatActivity implements Screen<STATE> {
 
+    private static final long UI_THROTTLE_INTERVAL = 100L;
+
     private VM viewModel;
     private CompositeDisposable disposable;
+    private STATE state;
 
     /**
      * Метод отвечает за корректное построение обработчика экрана с учетом всех зависимостей.
@@ -68,7 +73,7 @@ public abstract class ActivityScreen<STATE extends State,
      * @return интервал фильтрации
      */
     protected long getUiThrottleIntervalInMillis() {
-        return 100L;
+        return UI_THROTTLE_INTERVAL;
     }
 
     @Override
@@ -83,11 +88,11 @@ public abstract class ActivityScreen<STATE extends State,
         if (viewModel == null) {
             throw new IllegalStateException("Handler for this screen is not initialized");
         }
-        disposable.add(viewModel.getState(null)
+        disposable.add(viewModel.getState(this)
                 .throttleLatest(getUiThrottleIntervalInMillis(), TimeUnit.MILLISECONDS, true)
                 .observeOn(getScheduler())
                 .subscribe(this::render));
-        disposable.add(viewModel.getEffect()
+        disposable.add(viewModel.getEffect(this)
                 .throttleLatest(getUiThrottleIntervalInMillis(), TimeUnit.MILLISECONDS, true)
                 .observeOn(getScheduler())
                 .subscribe(this::applyEffect));
@@ -97,5 +102,17 @@ public abstract class ActivityScreen<STATE extends State,
     public void onPause() {
         super.onPause();
         disposable.clear();
+    }
+
+    @Nullable
+    @Override
+    public STATE getSavedState() {
+        return state;
+    }
+
+    @Override
+    @CallSuper
+    public void render(@NonNull STATE screenState) {
+        this.state = screenState;
     }
 }
