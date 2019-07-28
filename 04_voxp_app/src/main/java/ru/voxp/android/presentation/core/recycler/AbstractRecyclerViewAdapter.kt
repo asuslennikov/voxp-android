@@ -19,12 +19,15 @@ constructor(private val viewModelProvider: ViewModelProvider.Linked) :
     }) {
 
     override fun onBindViewHolder(screen: SCREEN, position: Int) {
+        if (position == itemCount - 1) {
+            return
+        }
         val state = getItem(position)
         if (state != null) {
-            val viewModel = viewModelProvider.getViewModel(resolveViewModelClass(screen))
+            val viewModel = viewModelProvider.getViewModel(resolveViewModelClass(screen, position))
             screen.bind(state, viewModel)
         }
     }
 
-    protected abstract fun resolveViewModelClass(screen: SCREEN): Class<out VM>
+    protected abstract fun resolveViewModelClass(screen: SCREEN, position: Int): Class<out VM>
 }

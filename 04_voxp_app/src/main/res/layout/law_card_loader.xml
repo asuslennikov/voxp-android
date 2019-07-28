@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="state"
+            type="ru.voxp.android.presentation.law.card.LawCardState" />
+
+        <variable
+            name="viewModel"
+            type="ru.voxp.android.presentation.law.card.LawCardViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/law_card_elevation">
+
+        <io.supercharge.shimmerlayout.ShimmerLayout
+            android:id="@+id/law_card_loader_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/law_card_loader_container_height"
+            app:shimmer_animation_duration="@integer/law_card_loader_shimmer_duration"
+            app:shimmer_auto_start="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/element_default_padding">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/law_card_loader_text_height"
+                    android:layout_marginTop="@dimen/element_default_padding"
+                    android:layout_marginEnd="24dp"
+                    android:background="@color/shimmer_color" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/law_card_loader_text_height"
+                    android:layout_marginTop="@dimen/element_default_padding"
+                    android:background="@color/shimmer_color" />
+
+                <TextView
+                    android:id="@+id/law_list_view_title"
+                    android:layout_width="@dimen/law_card_loader_date_text_width"
+                    android:layout_height="@dimen/law_card_loader_text_height"
+                    android:layout_marginTop="@dimen/element_default_padding"
+                    android:background="@color/shimmer_color" />
+            </LinearLayout>
+        </io.supercharge.shimmerlayout.ShimmerLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
