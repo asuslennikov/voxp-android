@@ -1,26 +1,33 @@
 package ru.voxp.android.presentation.core.recycler
 
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import ru.jewelline.mvvm.interfaces.HasKey
+import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 
-abstract class AbstractRecyclerViewAdapter<KEY, STATE, VM : ViewModel<STATE>, SCREEN : BoundRecyclerViewHolder<STATE, VM>>
-constructor(private val viewModelRegistry: ViewModelRegistry<KEY, VM>) :
-    ListAdapter<STATE, SCREEN>(object : DiffUtil.ItemCallback<STATE>() {
+abstract class AbstractRecyclerViewAdapter<STATE : State, VM : ViewModel<STATE>, SCREEN : BoundRecyclerViewHolder<STATE, VM>>
+constructor(private val viewModelProvider: ViewModelProvider.Linked) :
+    PagedListAdapter<STATE, SCREEN>(object : DiffUtil.ItemCallback<STATE>() {
         override fun areItemsTheSame(oldItem: STATE, newItem: STATE): Boolean {
-            return oldItem.key == newItem.key
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: STATE, newItem: STATE): Boolean {
             return areItemsTheSame(oldItem, newItem)
         }
-    }) where STATE : State, STATE : HasKey<KEY> {
+    }) {
 
-    override fun onBindViewHolder(holder: SCREEN, position: Int) {
+    override fun onBindViewHolder(screen: SCREEN, position: Int) {
+        if (position == itemCount - 1) {
+            return
+        }
         val state = getItem(position)
-        val viewModel = viewModelRegistry.getModel(state.key)
-        holder.bindHolder(Pair(state, viewModel))
+        if (state != null) {
+            val viewModel = viewModelProvider.getViewModel(resolveViewModelClass(screen, position))
+            screen.bind(state, viewModel)
+        }
     }
+
+    protected abstract fun resolveViewModelClass(screen: SCREEN, position: Int): Class<out VM>
 }

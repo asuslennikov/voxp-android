@@ -57,7 +57,9 @@ dependencies {
     implementation "$libraries.androidx_coordinatorlayout"
     implementation "$libraries.androidx_vectordrawable"
     implementation "$libraries.androidx_vectordrawable_animated"
+    implementation "$libraries.androidx_paging"
     implementation "$libraries.dagger"
+    implementation "$libraries.shimmer_layout"
 
     kapt "$libraries.dagger_compiler"
 

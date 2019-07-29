@@ -14,9 +14,8 @@ import javax.inject.Inject
 class RemoteRepositoryImpl @Inject constructor(
     private val retrofitRepository: RetrofitRepository
 ) : RemoteRepository {
-
-    override fun getLastLaws(): Observable<ResponseContainer> {
-        return retrofitRepository.getLastLaws()
+    override fun getLastLaws(page: Int?, limit: Int?): Observable<ResponseContainer> {
+        return retrofitRepository.getLastLaws(page ?: 1, limit ?: 20)
             .onErrorResumeNext { originCause: Throwable -> mapError(originCause) }
     }
 

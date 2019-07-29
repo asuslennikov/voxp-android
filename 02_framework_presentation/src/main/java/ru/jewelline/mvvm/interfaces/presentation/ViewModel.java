@@ -1,7 +1,6 @@
 package ru.jewelline.mvvm.interfaces.presentation;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 
 /**
@@ -18,19 +17,22 @@ public interface ViewModel<STATE extends State> {
     /**
      * Метод позволяет зарегестрировать слушателя для получения текущего состояния экрана.
      *
-     * @param savedState предыдущее состояние, сохраненное у слушателя.
-     *                   Реализация <code>ViewModel</code> самостоятельно решает как именно
-     *                   использовать переданный экземпляр
+     * @param screen объект, для которого планируется получать состояние экрана.
+     *               Реализация <code>ViewModel</code> самостоятельно решает как именно
+     *               использовать переданный экземпляр
      * @return RxJava имплементацию слушателя
      */
     @NonNull
-    Observable<STATE> getState(@Nullable STATE savedState);
+    Observable<STATE> getState(@NonNull Screen<STATE> screen);
 
     /**
      * Метод позволяет зарегестрировать слушателя для получения эффектов экрана.
      *
+     * @param screen объект, для которого планируется получать эффекты экрана.
+     *               Реализация <code>ViewModel</code> самостоятельно решает как именно
+     *               использовать переданный экземпляр
      * @return RxJava имплементацию слушателя
      */
     @NonNull
-    Observable<Effect> getEffect();
+    Observable<Effect> getEffect(@NonNull Screen<STATE> screen);
 }

@@ -10,4 +10,6 @@
 
     <integer name="last_law_fragment_shared_element_transition_duration">200</integer>
     <integer name="last_law_fragment_visibility_fade_duration">150</integer>
+
+    <integer name="law_card_loader_shimmer_duration">2400</integer>
 </resources>

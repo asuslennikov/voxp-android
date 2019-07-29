@@ -13,18 +13,28 @@ import ru.voxp.android.BR
 
 open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View) : ViewHolder(itemView),
     Screen<STATE> {
-    private val binding: ViewDataBinding? = DataBindingUtil.bind(itemView)
-    private val disposable: CompositeDisposable = CompositeDisposable()
+    companion object {
+        private const val NO_ACTUAL_ID = 0
+    }
 
-    internal fun bindHolder(bindingInformation: Pair<STATE, VM>) {
+    private val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
+    private val disposable: CompositeDisposable = CompositeDisposable()
+    private var screenState: STATE? = null
+
+    internal fun bind(state: STATE, viewModel: VM) {
         disposable.clear()
-        binding?.setVariable(getBindingViewModelVariableId(), bindingInformation.second)
-        disposable.add(bindingInformation.second
-            .getState(bindingInformation.first)
+        screenState = state
+        val screenVariableId = getBindingScreenVariableId()
+        if (NO_ACTUAL_ID != screenVariableId) {
+            binding.setVariable(screenVariableId, this)
+        }
+        binding.setVariable(getBindingViewModelVariableId(), viewModel)
+        disposable.add(viewModel
+            .getState(this)
             .subscribe { this.render(it) })
         if (holderSupportsEffects()) {
-            disposable.addAll(bindingInformation.second
-                .getEffect()
+            disposable.addAll(viewModel
+                .getEffect(this)
                 .subscribe { this.applyEffect(it) })
         }
     }
@@ -47,6 +57,17 @@ open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemVie
     protected fun getBindingViewModelVariableId() = BR.viewModel
 
     /**
+     * Возвращает идентификатор переменной биндинга для экрана. Необходимо для корректной работы
+     * метода [ViewDataBinding.setVariable]. Может потребоваться когда одна [ViewModel]
+     * обрабатывает несколько экранов и требуется передать текущий экран в качестве аргумента для обработчика UI события
+     *
+     * @return идентификатор переменной биндинга для экрана
+     */
+    protected fun getBindingScreenVariableId(): Int {
+        return NO_ACTUAL_ID
+    }
+
+    /**
      * Метод определяет, есть ли у холдера возможность обрабатывать эффекты. Если данный метод возвращает `true`, то
      * подписка на получение эффектов от модели осуществляться не будет, тем самым можем сэкономить по одному инстансу на каждый холдер.
      *
@@ -54,8 +75,12 @@ open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemVie
      */
     protected fun holderSupportsEffects(): Boolean = false
 
+    override fun getSavedState(): STATE? {
+        return screenState
+    }
+
     override fun render(screenState: STATE) {
-        binding?.setVariable(getBindingStateVariableId(), screenState)
+        binding.setVariable(getBindingStateVariableId(), screenState)
     }
 
     override fun applyEffect(screenEffect: Effect) {

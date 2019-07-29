@@ -1,19 +1,19 @@
 package ru.voxp.android
 
 import android.content.Context
-import ru.jewelline.mvvm.base.presentation.ViewModelFactory
+import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.voxp.android.data.di.DaggerManagerComponent
 import ru.voxp.android.domain.di.DaggerUseCaseComponent
 import ru.voxp.android.di.ApplicationModule
 import ru.voxp.android.di.DaggerApplicationComponent
-import ru.voxp.android.presentation.di.DaggerViewModelComponent
-import ru.voxp.android.presentation.di.ViewModelProvider
+import ru.voxp.android.presentation.di.DaggerPresentationComponent
+import ru.voxp.android.presentation.di.PresentationProvider
 
 internal class ComponentRegistry(context: Context) {
-    private var viewModelProvider: ViewModelProvider? = null
+    private var presentationProvider: PresentationProvider? = null
 
-    val viewModelFactory: ViewModelFactory
-        get() = viewModelProvider!!.getFactory()
+    val viewModelProvider: ViewModelProvider
+        get() = presentationProvider!!.getViewModelProvider()
 
     init {
         initializeRegistry(context)
@@ -29,7 +29,7 @@ internal class ComponentRegistry(context: Context) {
         val useCaseProvider = DaggerUseCaseComponent.builder()
             .useCaseDependenciesProvider(managerProvider)
             .build()
-        viewModelProvider = DaggerViewModelComponent.builder()
+        presentationProvider = DaggerPresentationComponent.builder()
             .applicationProvider(applicationProvider)
             .managerProvider(managerProvider)
             .useCaseProvider(useCaseProvider)

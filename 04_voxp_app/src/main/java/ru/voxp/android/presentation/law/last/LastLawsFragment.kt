@@ -59,7 +59,8 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
                 }
             }
         })
-        binding.lastLawsFragmentList.adapter = LawCardAdapter(viewModel.lawCardViewModelRegistry)
+        binding.lastLawsFragmentList.adapter =
+            LawCardAdapter(getViewModelProvider().linkWithStore(this))
     }
 
     /**

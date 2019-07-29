@@ -2,6 +2,7 @@ package ru.voxp.android.presentation.core
 
 import androidx.databinding.ViewDataBinding
 import ru.jewelline.mvvm.base.presentation.BoundFragmentScreen
+import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.BR
@@ -12,9 +13,11 @@ abstract class Fragment<STATE : State, VM : ViewModel<STATE>, B : ViewDataBindin
     private val viewModelClass: Class<VM>
 ) : BoundFragmentScreen<STATE, VM, B>() {
 
+    protected fun getViewModelProvider(): ViewModelProvider =
+        (context!!.applicationContext as VoxpApplication).viewModelProvider
+
     override fun createViewModel(): VM {
-        val viewModelFactory = (context!!.applicationContext as VoxpApplication).viewModelFactory
-        return viewModelFactory.getViewModel(this, viewModelClass)
+        return getViewModelProvider().getViewModel(this, viewModelClass)
     }
 
     override fun getLayoutResourceId(): Int {

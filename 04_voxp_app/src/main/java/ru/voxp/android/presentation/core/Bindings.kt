@@ -30,7 +30,7 @@ object Bindings {
     }
 
     @JvmStatic
-    @BindingAdapter("app:refresh")
+    @BindingAdapter("refresh")
     fun bindSwipeRefreshLayoutListener(view: SwipeRefreshLayout, listener: OnRefreshListener?) {
         view.setOnRefreshListener(listener)
     }

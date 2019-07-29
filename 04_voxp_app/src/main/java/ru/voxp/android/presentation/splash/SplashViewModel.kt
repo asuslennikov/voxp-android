@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.presentation.Effect
+import ru.jewelline.mvvm.interfaces.presentation.Screen
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.InitializationStatus
 import ru.voxp.android.R
@@ -20,9 +21,9 @@ class SplashViewModel(application: Application) : AndroidViewModel(application),
     private val delegate: ViewModel<SplashState> =
         RealSplashViewModel(application as VoxpApplication)
 
-    override fun getState(savedState: SplashState?): Observable<SplashState> = delegate.getState(savedState)
+    override fun getState(screen: Screen<SplashState>): Observable<SplashState> = delegate.getState(screen)
 
-    override fun getEffect(): Observable<Effect> = delegate.getEffect()
+    override fun getEffect(screen: Screen<SplashState>): Observable<Effect> = delegate.getEffect(screen)
 }
 
 internal class RealSplashViewModel(application: VoxpApplication) : AbstractViewModel<SplashState>() {

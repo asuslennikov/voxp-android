@@ -6,11 +6,11 @@ import android.os.Looper
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import ru.jewelline.mvvm.base.presentation.ViewModelFactory
+import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.voxp.android.InitializationStatus.COMPLETE
 
 class VoxpApplication : Application() {
-    lateinit var viewModelFactory: ViewModelFactory
+    lateinit var viewModelProvider: ViewModelProvider
     private val initializationSubject: Subject<InitializationStatus> =
         BehaviorSubject.createDefault(InitializationStatus.NOT_READY)
 
@@ -23,7 +23,7 @@ class VoxpApplication : Application() {
 
     protected fun initializeComponents() {
         val registry = ComponentRegistry(this)
-        viewModelFactory = registry.viewModelFactory
+        viewModelProvider = registry.viewModelProvider
         initializationSubject.onNext(COMPLETE)
     }
 
