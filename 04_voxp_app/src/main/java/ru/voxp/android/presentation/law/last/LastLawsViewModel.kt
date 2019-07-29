@@ -42,12 +42,16 @@ class LastLawsViewModel @Inject constructor(
                     when (result.status) {
                         IN_PROGRESS -> sendState(LastLawsState.loading(result.connectionAvailable))
                         SUCCESS -> sendState(
-                            LastLawsState.laws(
-                                mapLawsToPagedList(
-                                    result.laws,
-                                    result.total
+                            if (result.total == 0) {
+                                LastLawsState.noResults()
+                            } else {
+                                LastLawsState.laws(
+                                    mapLawsToPagedList(
+                                        result.laws,
+                                        result.total
+                                    )
                                 )
-                            )
+                            }
                         )
                         FAILURE -> handleGetLastLawsFailure(result)
                     }

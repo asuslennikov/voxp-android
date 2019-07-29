@@ -69,5 +69,13 @@ class LastLawsState : ErrorPanelState() {
                 errorPanelActionText = R.string.error_panel_retry_action_text
             }
         }
+
+        fun noResults(): LastLawsState {
+            return LastLawsState().apply {
+                errorPanelVisible = true;
+                errorPanelImage = R.drawable.ic_no_result
+                errorPanelText = R.string.error_panel_no_results_text
+            }
+        }
     }
 }
