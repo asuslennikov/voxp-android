@@ -7,22 +7,22 @@ import androidx.paging.PositionalDataSource
 import io.reactivex.disposables.Disposable
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
-import ru.voxp.android.domain.api.ExceptionType.CONNECTION
-import ru.voxp.android.domain.api.ExceptionType.SERVER
+import ru.voxp.android.domain.api.ExceptionType.*
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
-import ru.voxp.android.domain.usecase.*
+import ru.voxp.android.domain.usecase.SearchLawsInput
+import ru.voxp.android.domain.usecase.SearchLawsOutput
+import ru.voxp.android.domain.usecase.SearchLawsUseCase
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
 import javax.inject.Inject
 
 class LastLawsViewModel @Inject constructor(
-    private val fetchLawsUseCase: FetchLawsUseCase,
-    private val fetchLawsNetworkAwareUseCase: FetchLawsNetworkAwareUseCase,
     private val searchLawsUseCase: SearchLawsUseCase
 ) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
-    private var fetchLastLawsTask: Disposable? = null
+    private var searchLawsTaskDisposable: Disposable? = null
+    private var searchLawsTaskKey: String? = null
 
     init {
         requestLastLaws()
@@ -34,11 +34,12 @@ class LastLawsViewModel @Inject constructor(
 
     private fun requestLastLaws() {
         cancelFetchLastLawsTask()
-        fetchLastLawsTask = collectDisposable(
+        searchLawsTaskDisposable = collectDisposable(
             searchLawsUseCase.execute(SearchLawsInput())
                 .subscribe { result ->
+                    searchLawsTaskKey = result.getKey()
                     when (result.getStatus()) {
-                        IN_PROGRESS -> sendState(LastLawsState.loading(true))
+                        IN_PROGRESS -> sendState(LastLawsState.loading())
                         SUCCESS -> sendState(
                             if (result.getTotal() == 0) {
                                 LastLawsState.noResults()
@@ -48,23 +49,24 @@ class LastLawsViewModel @Inject constructor(
                                 )
                             }
                         )
-                        FAILURE -> handleGetLastLawsFailure(FetchLawsUseCaseOutput())
+                        FAILURE -> handleGetLastLawsFailure(result)
                     }
                 }
         )
     }
 
     private fun cancelFetchLastLawsTask() {
-        if (fetchLastLawsTask?.isDisposed == false) {
-            fetchLastLawsTask?.dispose()
-            fetchLastLawsTask = null
+        if (searchLawsTaskDisposable?.isDisposed == false) {
+            searchLawsTaskDisposable?.dispose()
+            searchLawsTaskDisposable = null
         }
     }
 
-    private fun handleGetLastLawsFailure(lawsOutput: FetchLawsUseCaseOutput) {
-        if (lawsOutput.hasException() && lawsOutput.exception is VoxpException) {
+    private fun handleGetLastLawsFailure(searchLawsOutput: SearchLawsOutput) {
+        if (searchLawsOutput.getException() is VoxpException) {
             sendState(
-                when ((lawsOutput.exception as VoxpException).exceptionType) {
+                when ((searchLawsOutput.getException() as VoxpException).exceptionType) {
+                    NO_CONNECTION_AVAILABLE -> LastLawsState.noInternet()
                     CONNECTION -> LastLawsState.connectionError()
                     SERVER -> LastLawsState.serverError()
                     else -> LastLawsState.deviceError()
@@ -123,15 +125,7 @@ class LastLawsViewModel @Inject constructor(
     ) :
         PositionalDataSource<LawCardState>() {
         override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<LawCardState>) {
-            collectDisposable(
-                fetchLawsUseCase.execute(FetchLawsUseCaseInput(params.startPosition, params.loadSize))
-                    .subscribe { result ->
-                        when (result.status) {
-                            SUCCESS -> callback.onResult(mapLawsToState(result.laws))
-                            FAILURE -> handleGetLastLawsFailure(result)
-                        }
-                    }
-            )
+            searchLawsUseCase.triggerNextPageLoading(SearchLawsInput(searchLawsTaskKey))
         }
 
         override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<LawCardState>) {

@@ -3,7 +3,8 @@ package ru.voxp.android.domain.api
 enum class ExceptionType {
     CLIENT,
     CONNECTION,
-    SERVER
+    SERVER,
+    NO_CONNECTION_AVAILABLE
 }
 
 class VoxpException(val exceptionType: ExceptionType, message: String, originalCause: Throwable?) :

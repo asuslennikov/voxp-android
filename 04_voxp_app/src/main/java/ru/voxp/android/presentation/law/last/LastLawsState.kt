@@ -19,20 +19,13 @@ class LastLawsState : ErrorPanelState() {
             }
         }
 
-        fun loading(connectionAvailable: Boolean): LastLawsState {
-            if (connectionAvailable) {
-                return loading()
-            }
-            return noInternet()
-        }
-
-        private fun loading(): LastLawsState {
+        fun loading(): LastLawsState {
             return LastLawsState().apply {
                 loaderVisible = true
             }
         }
 
-        private fun noInternet(): LastLawsState {
+        fun noInternet(): LastLawsState {
             return LastLawsState().apply {
                 errorPanelVisible = true
                 errorPanelImage = R.drawable.ic_no_internet

@@ -1,18 +1,25 @@
 package ru.voxp.android.domain.usecase
 
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
 import ru.jewelline.mvvm.interfaces.domain.UseCase
 import ru.jewelline.mvvm.interfaces.domain.UseCaseInput
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput
+import ru.voxp.android.domain.api.ExceptionType
+import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
+import ru.voxp.android.domain.api.network.NetworkManager
 import ru.voxp.android.domain.api.remote.RemoteRepository
 import ru.voxp.android.domain.di.UseCaseScope
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 data class SearchLawsInput(
     val key: String? = null,
@@ -55,6 +62,7 @@ private class SearchLawsOutputImpl(
 
 @UseCaseScope
 class SearchLawsUseCase @Inject constructor(
+    private val networkManager: NetworkManager,
     private val remoteRepository: RemoteRepository
 ) : UseCase<SearchLawsInput, SearchLawsOutput> {
     private val searches: MutableMap<String, BehaviorSubject<SearchLawsOutputImpl>> = WeakHashMap()
@@ -67,6 +75,15 @@ class SearchLawsUseCase @Inject constructor(
         }
     }
 
+    private fun cloneOutput(output: SearchLawsOutputImpl): SearchLawsOutputImpl {
+        return SearchLawsOutputImpl(output.getKey(), output.disposable).apply {
+            status = output.status
+            exception = output.exception
+            setData(output.getData())
+            setTotal(output.getTotal())
+        }
+    }
+
     private fun cleanByKey(key: String) {
         val subject = searches[key]
         if (subject != null) {
@@ -75,11 +92,25 @@ class SearchLawsUseCase @Inject constructor(
         }
     }
 
+    private fun getScheduler(): Scheduler = Schedulers.computation()
+
     private fun mapToObservable(key: String, subject: Subject<SearchLawsOutputImpl>): Observable<SearchLawsOutput> {
+        // todo dispose breaks broadcast logic
         return subject.doOnComplete { cleanByKey(key) }
             .doOnError { cleanByKey(key) }
             .doOnDispose { cleanByKey(key) }
+            .subscribeOn(getScheduler())
             .map { it }
+    }
+
+    private fun handleFailure(outputSubject: BehaviorSubject<SearchLawsOutputImpl>): Consumer<Throwable> {
+        return Consumer { throwable ->
+            val output = outputSubject.value!!
+            outputSubject.onNext(cloneOutput(output).apply {
+                status = UseCaseOutput.Status.FAILURE
+                exception = throwable
+            })
+        }
     }
 
     override fun execute(input: SearchLawsInput): Observable<SearchLawsOutput> {
@@ -93,29 +124,67 @@ class SearchLawsUseCase @Inject constructor(
         val output = generateOutput(key)
         val subject = BehaviorSubject.createDefault(output)
         searches[key] = subject
-        fetchLawsFromServer(input, subject)
+        doExecute(input, subject)
         return mapToObservable(key, subject)
+    }
+
+    fun triggerNextPageLoading(input: SearchLawsInput) {
+        if (input.key != null) {
+            val subject = searches[input.key]
+            if (subject != null && subject.value!!.status != UseCaseOutput.Status.IN_PROGRESS) {
+                doExecute(input, subject)
+            }
+        }
+    }
+
+    private fun doExecute(input: SearchLawsInput, outputSubject: BehaviorSubject<SearchLawsOutputImpl>) {
+        val networkAvailability = networkManager.isConnectionAvailable()
+        if (networkAvailability) {
+            fetchLawsFromServer(input, outputSubject)
+        } else {
+            handleFailure(outputSubject).accept(
+                VoxpException(ExceptionType.NO_CONNECTION_AVAILABLE, "Internet connection is not available")
+            )
+            awaitNetworkConnection(input, outputSubject)
+        }
+    }
+
+    private fun awaitNetworkConnection(input: SearchLawsInput, outputSubject: BehaviorSubject<SearchLawsOutputImpl>) {
+        val output = outputSubject.value!!
+        output.disposable.add(
+            networkManager.connectionAvailability()
+                .filter { networkAvailability -> networkAvailability }
+                .observeOn(getScheduler())
+                .take(1)
+                .subscribe(
+                    Consumer { fetchLawsFromServer(input, outputSubject) },
+                    handleFailure(outputSubject)
+                )
+        )
     }
 
     private fun fetchLawsFromServer(input: SearchLawsInput, outputSubject: BehaviorSubject<SearchLawsOutputImpl>) {
         val output = outputSubject.value!!
+        outputSubject.onNext(cloneOutput(output).apply {
+            status = UseCaseOutput.Status.IN_PROGRESS
+            exception = null
+        })
         val start: Int = output.getData().size
         output.disposable.add(
             remoteRepository.getLastLaws(start / input.fetchCount + 1, input.fetchCount)
+                .observeOn(getScheduler())
                 .subscribe(
-                    { response ->
+                    Consumer { response ->
                         outputSubject.onNext(SearchLawsOutputImpl(output.getKey(), output.disposable).apply {
                             status = UseCaseOutput.Status.SUCCESS
-                            setData(response.laws ?: Collections.emptyList())
+                            exception = null
+                            val data = ArrayList(output.getData())
+                            data.addAll(response.laws ?: Collections.emptyList())
+                            setData(data)
                             setTotal(response.count ?: getData().size)
                         })
                     },
-                    { throwable ->
-                        outputSubject.onNext(SearchLawsOutputImpl(output.getKey(), output.disposable).apply {
-                            status = UseCaseOutput.Status.FAILURE
-                            exception = throwable
-                        })
-                    }
+                    handleFailure(outputSubject)
                 )
         )
     }
