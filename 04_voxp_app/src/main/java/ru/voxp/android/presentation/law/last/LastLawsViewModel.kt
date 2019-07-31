@@ -11,17 +11,15 @@ import ru.voxp.android.domain.api.ExceptionType.CONNECTION
 import ru.voxp.android.domain.api.ExceptionType.SERVER
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
-import ru.voxp.android.domain.usecase.FetchLawsNetworkAwareUseCase
-import ru.voxp.android.domain.usecase.FetchLawsUseCase
-import ru.voxp.android.domain.usecase.FetchLawsUseCaseInput
-import ru.voxp.android.domain.usecase.FetchLawsUseCaseOutput
+import ru.voxp.android.domain.usecase.*
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
 import javax.inject.Inject
 
 class LastLawsViewModel @Inject constructor(
     private val fetchLawsUseCase: FetchLawsUseCase,
-    private val fetchLawsNetworkAwareUseCase: FetchLawsNetworkAwareUseCase
+    private val fetchLawsNetworkAwareUseCase: FetchLawsNetworkAwareUseCase,
+    private val searchLawsUseCase: SearchLawsUseCase
 ) : AbstractViewModel<LastLawsState>(), ErrorPanelViewModel {
 
     private var fetchLastLawsTask: Disposable? = null
@@ -37,23 +35,20 @@ class LastLawsViewModel @Inject constructor(
     private fun requestLastLaws() {
         cancelFetchLastLawsTask()
         fetchLastLawsTask = collectDisposable(
-            fetchLawsNetworkAwareUseCase.execute(FetchLawsUseCaseInput(0, 20))
+            searchLawsUseCase.execute(SearchLawsInput())
                 .subscribe { result ->
-                    when (result.status) {
-                        IN_PROGRESS -> sendState(LastLawsState.loading(result.connectionAvailable))
+                    when (result.getStatus()) {
+                        IN_PROGRESS -> sendState(LastLawsState.loading(true))
                         SUCCESS -> sendState(
-                            if (result.total == 0) {
+                            if (result.getTotal() == 0) {
                                 LastLawsState.noResults()
                             } else {
                                 LastLawsState.laws(
-                                    mapLawsToPagedList(
-                                        result.laws,
-                                        result.total
-                                    )
+                                    mapLawsToPagedList(result.getData(), result.getTotal())
                                 )
                             }
                         )
-                        FAILURE -> handleGetLastLawsFailure(result)
+                        FAILURE -> handleGetLastLawsFailure(FetchLawsUseCaseOutput())
                     }
                 }
         )
