@@ -1,14 +1,14 @@
 package ru.voxp.android.presentation.core.recycler
 
-import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 
 abstract class AbstractRecyclerViewAdapter<STATE : State, VM : ViewModel<STATE>, SCREEN : BoundRecyclerViewHolder<STATE, VM>>
 constructor(private val viewModelProvider: ViewModelProvider.Linked) :
-    PagedListAdapter<STATE, SCREEN>(object : DiffUtil.ItemCallback<STATE>() {
+    ListAdapter<STATE, SCREEN>(object : DiffUtil.ItemCallback<STATE>() {
         override fun areItemsTheSame(oldItem: STATE, newItem: STATE): Boolean {
             return oldItem == newItem
         }

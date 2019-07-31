@@ -1,6 +1,5 @@
 package ru.voxp.android.presentation.law.last
 
-import androidx.paging.PagedList
 import ru.voxp.android.R
 import ru.voxp.android.presentation.error.ErrorPanelState
 import ru.voxp.android.presentation.law.card.LawCardState
@@ -8,11 +7,11 @@ import ru.voxp.android.presentation.law.card.LawCardState
 class LastLawsState : ErrorPanelState() {
     var loaderVisible: Boolean = false
     var lawsVisible: Boolean = false
-    var laws: PagedList<LawCardState>? = null
+    var laws: List<LawCardState>? = null
 
     companion object {
 
-        fun laws(laws: PagedList<LawCardState>): LastLawsState {
+        fun laws(laws: List<LawCardState>): LastLawsState {
             return LastLawsState().apply {
                 lawsVisible = true
                 this.laws = laws

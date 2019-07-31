@@ -1,9 +1,5 @@
 package ru.voxp.android.presentation.law.last
 
-import android.os.AsyncTask
-import androidx.arch.core.executor.ArchTaskExecutor
-import androidx.paging.PagedList
-import androidx.paging.PositionalDataSource
 import io.reactivex.disposables.Disposable
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
@@ -44,9 +40,7 @@ class LastLawsViewModel @Inject constructor(
                             if (result.getTotal() == 0) {
                                 LastLawsState.noResults()
                             } else {
-                                LastLawsState.laws(
-                                    mapLawsToPagedList(result.getData(), result.getTotal())
-                                )
+                                LastLawsState.laws(mapLawsToState(result.getData()))
                             }
                         )
                         FAILURE -> handleGetLastLawsFailure(result)
@@ -77,23 +71,6 @@ class LastLawsViewModel @Inject constructor(
         }
     }
 
-    private fun pageListConfig(): PagedList.Config {
-        return PagedList.Config.Builder()
-            .setPageSize(20)
-            .setPrefetchDistance(5)
-            .setEnablePlaceholders(false)
-            .build()
-    }
-
-    private fun mapLawsToPagedList(modelLaws: List<Law>?, total: Int): PagedList<LawCardState> {
-        val result = mapLawsToState(modelLaws)
-
-        return PagedList.Builder<Int, LawCardState>(LawsDataSource(result, total), pageListConfig())
-            .setNotifyExecutor(ArchTaskExecutor.getMainThreadExecutor())
-            .setFetchExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            .build()
-    }
-
     private fun mapLawsToState(modelLaws: List<Law>?): ArrayList<LawCardState> {
         val result = ArrayList<LawCardState>()
         if (modelLaws != null && modelLaws.isNotEmpty()) {
@@ -117,19 +94,5 @@ class LastLawsViewModel @Inject constructor(
 
     override fun errorPanelActionClicked() {
         requestLastLaws()
-    }
-
-    inner class LawsDataSource(
-        private val initialLaws: List<LawCardState>,
-        private val total: Int
-    ) :
-        PositionalDataSource<LawCardState>() {
-        override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<LawCardState>) {
-            searchLawsUseCase.triggerNextPageLoading(SearchLawsInput(searchLawsTaskKey))
-        }
-
-        override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<LawCardState>) {
-            callback.onResult(initialLaws, 0, total)
-        }
     }
 }
