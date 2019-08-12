@@ -10,6 +10,7 @@ import ru.voxp.android.domain.usecase.SearchLawsOutput
 import ru.voxp.android.domain.usecase.SearchLawsUseCase
 import ru.voxp.android.presentation.error.ErrorPanelViewModel
 import ru.voxp.android.presentation.law.card.LawCardState
+import ru.voxp.android.presentation.law.card.LawLoaderState
 import javax.inject.Inject
 
 class LastLawsViewModel @Inject constructor(
@@ -90,9 +91,9 @@ class LastLawsViewModel @Inject constructor(
                 )
             )
         }
-//        if (searchLawsResult.getTotal() > searchLawsResult.getData().size){
-//            result.add(LawLoaderState())
-//        }
+        if (searchLawsResult.getTotal() > searchLawsResult.getData().size) {
+            result.add(LawLoaderState((searchLawsResult.getData().size + 1).toLong()))
+        }
         return result
     }
 

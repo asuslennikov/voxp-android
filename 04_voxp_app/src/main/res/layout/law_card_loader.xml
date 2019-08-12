@@ -8,11 +8,11 @@
 
         <variable
             name="state"
-            type="ru.voxp.android.presentation.law.card.LawCardState" />
+            type="ru.voxp.android.presentation.law.card.LawLoaderState" />
 
         <variable
             name="viewModel"
-            type="ru.voxp.android.presentation.law.card.LawCardViewModel" />
+            type="ru.voxp.android.presentation.law.card.LawLoaderViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView

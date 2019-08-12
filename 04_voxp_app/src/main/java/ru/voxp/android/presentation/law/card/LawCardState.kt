@@ -3,7 +3,7 @@ package ru.voxp.android.presentation.law.card
 import ru.jewelline.mvvm.interfaces.HasKey
 import ru.jewelline.mvvm.interfaces.presentation.State
 
-class LawCardState(
+open class LawCardState(
     val id: Long,
     val title: String = "",
     val subtitle: String = "",
