@@ -45,7 +45,6 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     }
 
     private fun configureLawsList() {
-        binding.lastLawsFragmentList.layoutManager = LinearLayoutManager(context)
         binding.lastLawsFragmentList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
                 val padding = resources.getDimension(R.dimen.element_default_padding).toInt()
@@ -56,6 +55,33 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
                     left = padding
                     right = padding
                     bottom = padding
+                }
+            }
+        })
+        val layoutManager = LinearLayoutManager(context)
+        binding.lastLawsFragmentList.layoutManager = layoutManager
+        binding.lastLawsFragmentList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            val itemCountBeforeNextPageRequest = 5
+            var nextPageTriggered = true
+            var previousItemCount = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy <= 0) {
+                    // Если скроллим вверх или влево-вправо - игнориуем
+                    return
+                }
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemIndex = layoutManager.findFirstVisibleItemPosition()
+
+                if (nextPageTriggered) {
+                    if (totalItemCount > previousItemCount) {
+                        previousItemCount = totalItemCount
+                        nextPageTriggered = false
+                    }
+                } else if ((totalItemCount - visibleItemCount) <= (firstVisibleItemIndex + itemCountBeforeNextPageRequest)) {
+                    nextPageTriggered = true
+                    viewModel.triggerNextPageLoading()
                 }
             }
         })

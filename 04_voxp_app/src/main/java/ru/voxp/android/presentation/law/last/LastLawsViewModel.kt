@@ -5,7 +5,6 @@ import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
 import ru.voxp.android.domain.api.ExceptionType.*
 import ru.voxp.android.domain.api.VoxpException
-import ru.voxp.android.domain.api.model.Law
 import ru.voxp.android.domain.usecase.SearchLawsInput
 import ru.voxp.android.domain.usecase.SearchLawsOutput
 import ru.voxp.android.domain.usecase.SearchLawsUseCase
@@ -35,12 +34,16 @@ class LastLawsViewModel @Inject constructor(
                 .subscribe { result ->
                     searchLawsTaskKey = result.getKey()
                     when (result.getStatus()) {
-                        IN_PROGRESS -> sendState(LastLawsState.loading())
+                        IN_PROGRESS -> {
+                            if (result.getData().isEmpty()) {
+                                sendState(LastLawsState.loading())
+                            }
+                        }
                         SUCCESS -> sendState(
                             if (result.getTotal() == 0) {
                                 LastLawsState.noResults()
                             } else {
-                                LastLawsState.laws(mapLawsToState(result.getData()))
+                                LastLawsState.laws(mapLawsToState(result))
                             }
                         )
                         FAILURE -> handleGetLastLawsFailure(result)
@@ -57,6 +60,9 @@ class LastLawsViewModel @Inject constructor(
     }
 
     private fun handleGetLastLawsFailure(searchLawsOutput: SearchLawsOutput) {
+        if (!searchLawsOutput.getData().isEmpty()) {
+            return
+        }
         if (searchLawsOutput.getException() is VoxpException) {
             sendState(
                 when ((searchLawsOutput.getException() as VoxpException).exceptionType) {
@@ -71,20 +77,22 @@ class LastLawsViewModel @Inject constructor(
         }
     }
 
-    private fun mapLawsToState(modelLaws: List<Law>?): ArrayList<LawCardState> {
+    private fun mapLawsToState(searchLawsResult: SearchLawsOutput): List<LawCardState> {
         val result = ArrayList<LawCardState>()
-        if (modelLaws != null && modelLaws.isNotEmpty()) {
-            for (law in modelLaws) {
-                result.add(
-                    LawCardState(
-                        law.id ?: 0L,
-                        law.name ?: "",
-                        law.comments ?: "",
-                        law.introductionDate ?: ""
-                    )
+        val modelLaws = searchLawsResult.getData()
+        for (law in modelLaws) {
+            result.add(
+                LawCardState(
+                    law.id ?: 0L,
+                    law.name ?: "",
+                    law.comments ?: "",
+                    law.introductionDate ?: ""
                 )
-            }
+            )
         }
+//        if (searchLawsResult.getTotal() > searchLawsResult.getData().size){
+//            result.add(LawLoaderState())
+//        }
         return result
     }
 
@@ -94,5 +102,9 @@ class LastLawsViewModel @Inject constructor(
 
     override fun errorPanelActionClicked() {
         requestLastLaws()
+    }
+
+    fun triggerNextPageLoading() {
+        searchLawsUseCase.triggerNextPageLoading(SearchLawsInput(searchLawsTaskKey))
     }
 }

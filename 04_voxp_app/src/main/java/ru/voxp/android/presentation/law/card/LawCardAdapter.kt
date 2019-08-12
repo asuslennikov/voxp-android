@@ -43,8 +43,4 @@ class LawCardAdapter(viewModelProvider: ViewModelProvider.Linked) :
         val view = LayoutInflater.from(parent.context).inflate(layoutResourceId, parent, false)
         return LawCardViewHolder(view)
     }
-
-    override fun getItemCount(): Int {
-        return super.getItemCount() + 1
-    }
 }

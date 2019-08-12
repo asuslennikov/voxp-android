@@ -14,4 +14,23 @@ class LawCardState(
     val dateVisible: Boolean = date.isNotBlank()
 
     override fun getKey(): Long = id
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        if (javaClass != other?.javaClass) {
+            return false
+        }
+
+        if (id != (other as LawCardState).id) {
+            return false
+        }
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }
