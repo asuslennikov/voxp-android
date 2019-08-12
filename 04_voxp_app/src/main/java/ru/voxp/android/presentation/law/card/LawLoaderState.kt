@@ -1,3 +1,5 @@
 package ru.voxp.android.presentation.law.card
 
-class LawLoaderState(nextPageId: Long) : LawCardState(nextPageId)
+class LawLoaderState(searchRequestKey: String) : LawCardState(searchRequestKey) {
+    var errorText: String? = null
+}

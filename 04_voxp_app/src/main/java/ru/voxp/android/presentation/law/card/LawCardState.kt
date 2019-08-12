@@ -4,16 +4,16 @@ import ru.jewelline.mvvm.interfaces.HasKey
 import ru.jewelline.mvvm.interfaces.presentation.State
 
 open class LawCardState(
-    val id: Long,
+    val id: String,
     val title: String = "",
     val subtitle: String = "",
     val date: String = ""
-) : State, HasKey<Long> {
+) : State, HasKey<String> {
     val titleVisible: Boolean = title.isNotBlank()
     val subtitleVisible: Boolean = subtitle.isNotBlank()
     val dateVisible: Boolean = date.isNotBlank()
 
-    override fun getKey(): Long = id
+    override fun getKey(): String = id
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

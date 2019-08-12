@@ -1,6 +1,9 @@
 package ru.voxp.android.presentation.core.recycler
 
+import androidx.annotation.CallSuper
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -10,8 +13,9 @@ import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 
 abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel(), ViewModel<STATE> {
-    private val stateMapping: MutableMap<Any, Subject<STATE>> = HashMap()
+    private val stateMapping: MutableMap<Any, BehaviorSubject<STATE>> = HashMap()
     private val effectMapping: MutableMap<Any, Subject<Effect>> = HashMap()
+    private val compositeDisposable = CompositeDisposable()
 
     private fun checkScreenHasState(screen: Screen<STATE>) {
         if (screen.savedState == null) {
@@ -31,6 +35,7 @@ abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel()
         if (stream == null) {
             stream = BehaviorSubject.createDefault(screen.savedState)
             stateMapping[key] = stream
+            onFirstScreenAttach(screen)
         }
         return stream
     }
@@ -44,5 +49,44 @@ abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel()
             effectMapping[key] = stream
         }
         return stream
+    }
+
+    /**
+     * Метод вызывается когда [ViewHolder] впервые подключается к данной viewModel
+     */
+    @CallSuper
+    protected open fun onFirstScreenAttach(screen: Screen<STATE>) {
+        // do nothing by default
+    }
+
+    protected fun collectDisposable(disposable: Disposable): Disposable {
+        compositeDisposable.add(disposable)
+        return disposable
+    }
+
+    @CallSuper
+    override fun onCleared() {
+        super.onCleared()
+        for (stateSubject in stateMapping.values) {
+            stateSubject.onComplete()
+        }
+        for (effectSubject in effectMapping.values) {
+            effectSubject.onComplete()
+        }
+        compositeDisposable.clear()
+    }
+
+    private fun getStateSubjectByScreen(screen: Screen<STATE>): BehaviorSubject<STATE> {
+        checkScreenHasState(screen)
+        return stateMapping[getScreenStateKey(screen)]
+            ?: throw RuntimeException("Screen is not attached to this viewModel")
+    }
+
+    protected fun sendState(screen: Screen<STATE>, newState: STATE) {
+        getStateSubjectByScreen(screen).onNext(newState)
+    }
+
+    protected fun getCurrentState(screen: Screen<STATE>): STATE {
+        return getStateSubjectByScreen(screen).value!!
     }
 }

@@ -84,7 +84,7 @@ class LastLawsViewModel @Inject constructor(
         for (law in modelLaws) {
             result.add(
                 LawCardState(
-                    law.id ?: 0L,
+                    law.id?.toString() ?: "none",
                     law.name ?: "",
                     law.comments ?: "",
                     law.introductionDate ?: ""
@@ -92,7 +92,7 @@ class LastLawsViewModel @Inject constructor(
             )
         }
         if (searchLawsResult.getTotal() > searchLawsResult.getData().size) {
-            result.add(LawLoaderState((searchLawsResult.getData().size + 1).toLong()))
+            result.add(LawLoaderState(searchLawsTaskKey!!))
         }
         return result
     }

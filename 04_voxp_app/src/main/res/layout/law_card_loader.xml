@@ -38,6 +38,7 @@
                     android:layout_height="@dimen/law_card_loader_text_height"
                     android:layout_marginTop="@dimen/element_default_padding"
                     android:layout_marginEnd="24dp"
+                    android:text="@{state.errorText}"
                     android:background="@color/shimmer_color" />
 
                 <TextView
