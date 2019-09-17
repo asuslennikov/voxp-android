@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="state"
-            type="ru.voxp.android.presentation.law.card.LawCardState" />
-
-        <variable
-            name="viewModel"
-            type="ru.voxp.android.presentation.law.card.LawCardViewModel" />
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="@dimen/law_card_elevation">
 
+        <include
+            android:id="@+id/last_laws_fragment_error_panel"
+            layout="@layout/error_panel"
+            android:visibility="@{state.errorPanelVisible ? View.VISIBLE : View.GONE}"
+            bind:state="@{state}"
+            bind:viewModel="@{viewModel}"
+            tools:visibility="invisible" />
+
         <io.supercharge.shimmerlayout.ShimmerLayout
             android:id="@+id/law_card_loader_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/law_card_loader_container_height"
+            android:visibility="@{state.errorPanelVisible ? View.GONE : View.VISIBLE}"
             app:shimmer_animation_duration="@integer/law_card_loader_shimmer_duration"
             app:shimmer_auto_start="true">
 
@@ -37,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/law_card_loader_text_height"
                     android:layout_marginTop="@dimen/element_default_padding"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="@dimen/law_card_loader_text_margin_end"
                     android:background="@color/shimmer_color" />
 
                 <TextView
@@ -55,4 +53,17 @@
             </LinearLayout>
         </io.supercharge.shimmerlayout.ShimmerLayout>
     </androidx.cardview.widget.CardView>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="state"
+            type="ru.voxp.android.presentation.law.card.LawLoaderState" />
+
+        <variable
+            name="viewModel"
+            type="ru.voxp.android.presentation.law.card.LawLoaderViewModel" />
+    </data>
 </layout>

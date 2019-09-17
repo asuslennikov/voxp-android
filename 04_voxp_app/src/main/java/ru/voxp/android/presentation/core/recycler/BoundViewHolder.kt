@@ -4,6 +4,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import ru.jewelline.mvvm.interfaces.presentation.Effect
 import ru.jewelline.mvvm.interfaces.presentation.Screen
@@ -11,30 +12,35 @@ import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.BR
 
-open class BoundRecyclerViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View) : ViewHolder(itemView),
-    Screen<STATE> {
-    companion object {
-        private const val NO_ACTUAL_ID = 0
+open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View, private val viewModel: VM) :
+    ViewHolder(itemView), Screen<STATE> {
+    private companion object {
+        const val NO_ACTUAL_ID = 0
     }
 
     private val binding: ViewDataBinding = DataBindingUtil.bind(itemView)!!
     private val disposable: CompositeDisposable = CompositeDisposable()
     private var screenState: STATE? = null
 
-    internal fun bind(state: STATE, viewModel: VM) {
-        disposable.clear()
-        screenState = state
+    init {
+        binding.setVariable(getBindingViewModelVariableId(), viewModel)
         val screenVariableId = getBindingScreenVariableId()
-        if (NO_ACTUAL_ID != screenVariableId) {
+        if (screenVariableId != NO_ACTUAL_ID) {
             binding.setVariable(screenVariableId, this)
         }
-        binding.setVariable(getBindingViewModelVariableId(), viewModel)
+    }
+
+    fun bind(state: STATE) {
+        disposable.clear()
+        screenState = state
         disposable.add(viewModel
             .getState(this)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { this.render(it) })
         if (holderSupportsEffects()) {
             disposable.addAll(viewModel
                 .getEffect(this)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { this.applyEffect(it) })
         }
     }

@@ -41,7 +41,7 @@ public abstract class AbstractViewModel<STATE extends State> extends androidx.li
      * @return текущее состояние экрана
      */
     @NonNull
-    protected final STATE getState() {
+    protected final STATE getCurrentState() {
         if (currentState == null) {
             currentState = buildInitialState();
         }

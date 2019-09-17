@@ -1,50 +1,57 @@
 package ru.voxp.android.presentation.law.card
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.supercharge.shimmerlayout.ShimmerLayout
 import ru.jewelline.mvvm.base.presentation.ViewModelProvider
+import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.voxp.android.R
 import ru.voxp.android.presentation.core.recycler.AbstractRecyclerViewAdapter
-import ru.voxp.android.presentation.core.recycler.BoundRecyclerViewHolder
+import ru.voxp.android.presentation.core.recycler.BoundViewHolder
 
-class LawCardViewHolder(itemView: View) : BoundRecyclerViewHolder<LawCardState, LawCardViewModel>(itemView)
+class LawCardViewHolder(itemView: View, viewModel: LawCardViewModel) :
+    BoundViewHolder<LawCardState, LawCardViewModel>(itemView, viewModel)
 
-class LawCardAdapter(viewModelProvider: ViewModelProvider.Linked) :
-    AbstractRecyclerViewAdapter<LawCardState, LawCardViewModel, LawCardViewHolder>(viewModelProvider) {
+class LawLoaderViewHolder(itemView: View, viewModel: LawLoaderViewModel) :
+    BoundViewHolder<LawLoaderState, LawLoaderViewModel>(itemView, viewModel) {
 
-    companion object ViewType {
-        private const val LAW = 0
-        private const val LOADER = 1
+    private val shimmerLayout: ShimmerLayout = itemView.findViewById(R.id.law_card_loader_container)
+
+    override fun render(screenState: LawLoaderState) {
+        super.render(screenState)
+        if (screenState.showAnimation) {
+            shimmerLayout.startShimmerAnimation()
+        } else {
+            shimmerLayout.stopShimmerAnimation()
+        }
+    }
+}
+
+class LawCardAdapter(viewModelProvider: ViewModelProvider.Linked) : AbstractRecyclerViewAdapter(viewModelProvider) {
+
+    private companion object ViewType {
+        const val LAW = 0
+        const val LOADER = 1
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) {
-            LOADER
-        } else {
-            LAW
+        if (getItem(position) is LawLoaderState) {
+            return LOADER
         }
+        return LAW
     }
 
-    override fun resolveViewModelClass(screen: LawCardViewHolder, position: Int): Class<LawCardViewModel> {
-        return if (getItemViewType(position) == LAW) {
-            LawCardViewModel::class.java
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoundViewHolder<out State, *> {
+        return if (viewType == LAW) {
+            LawCardViewHolder(
+                inflate(parent, R.layout.law_card),
+                createViewModel(LawCardViewModel::class.java)
+            )
         } else {
-            LawCardViewModel::class.java
+            LawLoaderViewHolder(
+                inflate(parent, R.layout.law_card_loader),
+                createViewModel(LawLoaderViewModel::class.java)
+            )
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LawCardViewHolder {
-        val layoutResourceId = if (viewType == LAW) {
-            R.layout.law_card
-        } else {
-            R.layout.law_card_loader
-        }
-        val view = LayoutInflater.from(parent.context).inflate(layoutResourceId, parent, false)
-        return LawCardViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return super.getItemCount() + 1
     }
 }

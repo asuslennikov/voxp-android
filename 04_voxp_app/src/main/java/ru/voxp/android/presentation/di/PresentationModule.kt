@@ -10,6 +10,7 @@ import ru.jewelline.mvvm.base.presentation.ViewModelFactory
 import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.presentation.law.card.LawCardViewModel
+import ru.voxp.android.presentation.law.card.LawLoaderViewModel
 import ru.voxp.android.presentation.law.last.LastLawsViewModel
 import javax.inject.Provider
 
@@ -32,6 +33,11 @@ internal abstract class PresentationModule {
     @IntoMap
     @ViewModelKey(LawCardViewModel::class)
     abstract fun bindsLawCardViewModel(instance: LawCardViewModel): ViewModel<*>
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LawLoaderViewModel::class)
+    abstract fun bindsLawLoaderViewModel(instance: LawLoaderViewModel): ViewModel<*>
 
     @Module
     companion object {
