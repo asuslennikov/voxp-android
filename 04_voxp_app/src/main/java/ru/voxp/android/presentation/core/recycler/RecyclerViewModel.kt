@@ -24,12 +24,12 @@ abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel()
     }
 
     private fun getScreenStateKey(screen: Screen<STATE>): Any {
+        checkScreenHasState(screen)
         // TODO change, state can be replaced by another instance
         return screen.savedState?.hashCode() ?: 0
     }
 
     override fun getState(screen: Screen<STATE>): Observable<STATE> {
-        checkScreenHasState(screen)
         val key = getScreenStateKey(screen)
         var stream = stateMapping[key]
         if (stream == null) {
@@ -41,7 +41,6 @@ abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel()
     }
 
     override fun getEffect(screen: Screen<STATE>): Observable<Effect> {
-        checkScreenHasState(screen)
         val key = getScreenStateKey(screen)
         var stream = effectMapping[key]
         if (stream == null) {

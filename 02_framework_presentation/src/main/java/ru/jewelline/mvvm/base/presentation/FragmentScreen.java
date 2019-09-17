@@ -1,10 +1,14 @@
 package ru.jewelline.mvvm.base.presentation;
 
 import android.os.Bundle;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -13,8 +17,6 @@ import ru.jewelline.mvvm.interfaces.presentation.Effect;
 import ru.jewelline.mvvm.interfaces.presentation.Screen;
 import ru.jewelline.mvvm.interfaces.presentation.State;
 import ru.jewelline.mvvm.interfaces.presentation.ViewModel;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Реализация {@link Screen}, связывающая его с конкретной {@link ViewModel}
@@ -86,7 +88,7 @@ public abstract class FragmentScreen<STATE extends State, VM extends ViewModel<S
     public void onResume() {
         super.onResume();
         if (viewModel == null) {
-            throw new IllegalStateException("Handler for this screen is not initialized");
+            throw new IllegalStateException("View model for this screen is not initialized");
         }
         disposable.add(viewModel.getState(this)
                 .throttleLatest(getUiThrottleIntervalInMillis(), TimeUnit.MILLISECONDS, true)

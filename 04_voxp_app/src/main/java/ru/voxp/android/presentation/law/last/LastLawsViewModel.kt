@@ -3,6 +3,7 @@ package ru.voxp.android.presentation.law.last
 import io.reactivex.disposables.Disposable
 import ru.jewelline.mvvm.base.presentation.AbstractViewModel
 import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
+import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.voxp.android.domain.api.ExceptionType.*
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.usecase.SearchLawsInput
@@ -78,8 +79,8 @@ class LastLawsViewModel @Inject constructor(
         }
     }
 
-    private fun mapLawsToState(searchLawsResult: SearchLawsOutput): List<LawCardState> {
-        val result = ArrayList<LawCardState>()
+    private fun mapLawsToState(searchLawsResult: SearchLawsOutput): List<State> {
+        val result = ArrayList<State>()
         val modelLaws = searchLawsResult.getData()
         for (law in modelLaws) {
             result.add(

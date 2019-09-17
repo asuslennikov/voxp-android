@@ -10,6 +10,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="screen"
+            type="ru.voxp.android.presentation.law.last.LastLawsFragment" />
+
+        <variable
             name="state"
             type="ru.voxp.android.presentation.law.last.LastLawsState" />
 
@@ -107,5 +111,6 @@
             bind:state="@{state}"
             bind:viewModel="@{viewModel}"
             tools:visibility="invisible" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

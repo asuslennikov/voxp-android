@@ -4,6 +4,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import ru.jewelline.mvvm.interfaces.presentation.Effect
 import ru.jewelline.mvvm.interfaces.presentation.Screen
@@ -34,10 +35,12 @@ open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View,
         screenState = state
         disposable.add(viewModel
             .getState(this)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { this.render(it) })
         if (holderSupportsEffects()) {
             disposable.addAll(viewModel
                 .getEffect(this)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { this.applyEffect(it) })
         }
     }
