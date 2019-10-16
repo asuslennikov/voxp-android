@@ -58,6 +58,12 @@
                     android:paddingEnd="@dimen/element_default_padding"
                     android:paddingRight="@dimen/element_default_padding"
                     android:text="@string/last_laws_fragment_header_text" />
+
+                <androidx.appcompat.widget.SearchView
+                    style="@style/ToolbarSearchStyle"
+                    android:theme="@style/ToolbarSearchTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
