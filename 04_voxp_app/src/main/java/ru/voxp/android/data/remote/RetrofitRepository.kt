@@ -6,6 +6,6 @@ import retrofit2.http.Query
 import ru.voxp.android.domain.api.model.ResponseContainer
 
 interface RetrofitRepository {
-    @GET("/api/v1/laws?sort=date")
+    @GET("search.json?sort=date")
     fun getLastLaws(@Query("page") page: Int, @Query("limit") limit: Int): Observable<ResponseContainer>
 }

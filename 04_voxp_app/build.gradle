@@ -6,6 +6,15 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+static String getVoxpApiToken() {
+    def voxpApiTokenVariableName = 'VOXP_TOKEN'
+    if (System.getenv(voxpApiTokenVariableName)) {
+        return System.getenv(voxpApiTokenVariableName)
+    } else {
+        throw new IllegalThreadStateException("Please define an environment variable with name '$voxpApiTokenVariableName'")
+    }
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -16,6 +25,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        buildConfigField "String", "VOXP_API_TOKEN", "\"${getVoxpApiToken()}\""
     }
     buildTypes {
         release {

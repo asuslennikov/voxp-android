@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">voxp.ru</domain>
+        <domain includeSubdomains="true">api.duma.gov.ru</domain>
     </domain-config>
 </network-security-config>
