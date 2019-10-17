@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="screen"
+            type="ru.voxp.android.presentation.law.card.LawCardViewHolder" />
+
+        <variable
             name="state"
             type="ru.voxp.android.presentation.law.card.LawCardState" />
 
@@ -17,8 +21,12 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/law_card_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{() -> viewModel.onCardClick(screen)}"
         app:cardElevation="@dimen/law_card_elevation">
 
         <LinearLayout

@@ -88,4 +88,14 @@ abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel()
     protected fun getCurrentState(screen: Screen<STATE>): STATE {
         return getStateSubjectByScreen(screen).value!!
     }
+
+    private fun getEffectSubjectByScreen(screen: Screen<STATE>): Subject<Effect> {
+        checkScreenHasState(screen)
+        return effectMapping[getScreenStateKey(screen)]
+            ?: throw RuntimeException("Screen is not attached to this viewModel")
+    }
+
+    protected fun sendEffect(screen: Screen<STATE>, screenEffect: Effect) {
+        getEffectSubjectByScreen(screen).onNext(screenEffect)
+    }
 }

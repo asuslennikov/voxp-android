@@ -88,7 +88,8 @@ class LastLawsViewModel @Inject constructor(
                     law.id?.toString() ?: "none",
                     law.name ?: "",
                     law.comments ?: "",
-                    law.introductionDate ?: ""
+                    law.introductionDate ?: "",
+                    law.url
                 )
             )
         }

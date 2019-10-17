@@ -7,7 +7,8 @@ open class LawCardState(
     val id: String,
     val title: String = "",
     val subtitle: String = "",
-    val date: String = ""
+    val date: String = "",
+    val url: String? = null
 ) : State, HasKey<String> {
     val titleVisible: Boolean = title.isNotBlank()
     val subtitleVisible: Boolean = subtitle.isNotBlank()

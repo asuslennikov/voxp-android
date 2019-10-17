@@ -52,7 +52,7 @@ open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View,
      * @return идентификатор переменной биндинга для состояния экрана
      * @see #render(STATE)
      */
-    protected fun getBindingStateVariableId() = BR.state
+    protected open fun getBindingStateVariableId() = BR.state
 
     /**
      * Возвращает идентификатор переменной биндинга для обработчика экрана. Необходимо для корректной работы
@@ -60,7 +60,7 @@ open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View,
      *
      * @return идентификатор переменной биндинга для обработчика экрана
      */
-    protected fun getBindingViewModelVariableId() = BR.viewModel
+    protected open fun getBindingViewModelVariableId() = BR.viewModel
 
     /**
      * Возвращает идентификатор переменной биндинга для экрана. Необходимо для корректной работы
@@ -69,7 +69,7 @@ open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View,
      *
      * @return идентификатор переменной биндинга для экрана
      */
-    protected fun getBindingScreenVariableId(): Int {
+    protected open fun getBindingScreenVariableId(): Int {
         return NO_ACTUAL_ID
     }
 
@@ -79,7 +79,7 @@ open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View,
      *
      * @return `true` если холдер умеет обрабатывать эффекты
      */
-    protected fun holderSupportsEffects(): Boolean = false
+    protected open fun holderSupportsEffects(): Boolean = false
 
     override fun getSavedState(): STATE? {
         return screenState
