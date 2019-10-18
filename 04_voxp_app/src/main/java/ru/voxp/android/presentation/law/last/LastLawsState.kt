@@ -8,7 +8,22 @@ import java.util.*
 class LastLawsState : ErrorPanelState() {
     var loaderVisible: Boolean = false
     var lawsVisible: Boolean = false
+    var searchExpanded: Boolean = false
     var laws: List<State> = Collections.emptyList()
+
+    fun clone(): LastLawsState {
+        val clone = LastLawsState()
+        clone.loaderVisible = loaderVisible
+        clone.lawsVisible = lawsVisible
+        clone.searchExpanded = searchExpanded
+        clone.laws = laws
+        clone.errorPanelVisible = errorPanelVisible
+        clone.errorPanelImage = errorPanelImage
+        clone.errorPanelText = errorPanelText
+        clone.errorPanelActionVisible = errorPanelActionVisible
+        clone.errorPanelActionText = errorPanelActionText
+        return clone
+    }
 
     companion object {
 

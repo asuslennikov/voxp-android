@@ -1,8 +1,10 @@
 package ru.voxp.android.presentation.core
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
@@ -33,5 +35,11 @@ object Bindings {
     @BindingAdapter("refresh")
     fun bindSwipeRefreshLayoutListener(view: SwipeRefreshLayout, listener: OnRefreshListener?) {
         view.setOnRefreshListener(listener)
+    }
+
+    @JvmStatic
+    @BindingAdapter("onSearchClick")
+    fun bindSearchViewClickListener(view: SearchView, listener: View.OnClickListener?) {
+        view.setOnSearchClickListener(listener)
     }
 }

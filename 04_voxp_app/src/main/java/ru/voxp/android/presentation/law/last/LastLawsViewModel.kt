@@ -110,4 +110,10 @@ class LastLawsViewModel @Inject constructor(
     fun triggerNextPageLoading() {
         searchLawsUseCase.triggerNextPageLoading(SearchLawsInput(searchLawsTaskKey))
     }
+
+    fun onSearchClick() {
+        sendState(currentState.clone().apply {
+            searchExpanded = !currentState.searchExpanded
+        })
+    }
 }

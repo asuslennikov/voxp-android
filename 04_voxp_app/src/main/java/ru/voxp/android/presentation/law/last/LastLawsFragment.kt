@@ -4,7 +4,10 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.State
@@ -19,7 +22,11 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     R.layout.last_laws_fragment,
     LastLawsViewModel::class.java
 ) {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         configureFragmentAnimation(view)
         configureLawsList()
@@ -46,7 +53,12 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
 
     private fun configureLawsList() {
         binding.lastLawsFragmentList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: State
+            ) {
                 val padding = resources.getDimension(R.dimen.element_default_padding).toInt()
                 with(outRect) {
                     if (parent.getChildAdapterPosition(view) == 0) {
@@ -109,12 +121,19 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     }
 
     override fun render(screenState: LastLawsState) {
+        val searchPreviouslyExpanded = savedState?.searchExpanded ?: false
         super.render(screenState)
         (binding.lastLawsFragmentList.adapter as LawCardAdapter).submitList(screenState.laws)
         changeViewVisibility(screenState.loaderVisible, binding.lastLawsFragmentLoaderContainer)
-        changeViewVisibility(screenState.errorPanelVisible, binding.lastLawsFragmentErrorPanel.errorPanelContainer)
+        changeViewVisibility(
+            screenState.errorPanelVisible,
+            binding.lastLawsFragmentErrorPanel.errorPanelContainer
+        )
         changeViewVisibility(screenState.lawsVisible, binding.lastLawsFragmentSwipeRefresh)
         binding.lastLawsFragmentSwipeRefresh.isRefreshing = false
+        if (searchPreviouslyExpanded != screenState.searchExpanded) {
+            renderToolbarSearchStateSwitch(screenState.searchExpanded)
+        }
     }
 
     private fun getLong(resId: Int): Long {
@@ -134,5 +153,25 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
                 targetView.visibility = View.GONE
             }
         }
+    }
+
+    private fun renderToolbarSearchStateSwitch(searchExpanded: Boolean) {
+        val currentConstraints = ConstraintSet()
+        currentConstraints.clone(binding.lastLawsFragmentToolbar)
+        val targetConstraints = ConstraintSet()
+        targetConstraints.clone(binding.lastLawsFragmentToolbar)
+        targetConstraints.setVisibility(
+            R.id.last_laws_fragment_toolbar_icon,
+            if (searchExpanded) GONE else VISIBLE
+        )
+        targetConstraints.setVisibility(
+            R.id.last_laws_fragment_header,
+            if (searchExpanded) GONE else VISIBLE
+        )
+        targetConstraints.applyTo(binding.lastLawsFragmentToolbar)
+        val transition = AutoTransition().apply {
+            duration = getLong(R.integer.last_law_fragment_toolbar_expansion_duration)
+        }
+        TransitionManager.beginDelayedTransition(binding.lastLawsFragmentToolbar, transition)
     }
 }

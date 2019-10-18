@@ -33,11 +33,12 @@
             android:layout_height="wrap_content"
             android:clipChildren="false">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/last_laws_fragment_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/toolbar_icon_size"
                 android:clipChildren="false"
-                android:orientation="horizontal"
                 app:layout_scrollFlags="scroll|enterAlways|snap">
 
                 <ImageView
@@ -47,24 +48,39 @@
                     android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
                     android:padding="@dimen/element_default_padding"
                     android:transitionName="last_laws_fragment_toolbar_icon"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_bullhorn_toolbar" />
 
                 <TextView
                     android:id="@+id/last_laws_fragment_header"
                     style="@style/AppBarText"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:gravity="center_vertical"
                     android:paddingEnd="@dimen/element_default_padding"
                     android:paddingRight="@dimen/element_default_padding"
-                    android:text="@string/last_laws_fragment_header_text" />
+                    android:text="@string/last_laws_fragment_header_text"
+                    app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+                    app:layout_constraintLeft_toRightOf="@id/last_laws_fragment_toolbar_icon"
+                    app:layout_constraintStart_toEndOf="@id/last_laws_fragment_toolbar_icon"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.SearchView
+                    android:id="@+id/last_laws_fragment_toolbar_search"
                     style="@style/ToolbarSearchStyle"
-                    android:theme="@style/ToolbarSearchTheme"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+                    android:layout_height="0dp"
+                    android:paddingStart="@dimen/element_default_padding"
+                    android:paddingLeft="@dimen/element_default_padding"
+                    android:theme="@style/ToolbarSearchTheme"
+                    app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    bind:onSearchClick="@{() -> viewModel.onSearchClick()}" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

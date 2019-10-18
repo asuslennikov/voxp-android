@@ -39,7 +39,7 @@ internal class RealSplashViewModel(application: VoxpApplication) : AbstractViewM
         disposable = collectDisposable(Observable.combineLatest(
             initializationObservable,
             minAnimationDurationObservable,
-            BiFunction { f: InitializationStatus, s: Long -> f })
+            BiFunction { f: InitializationStatus, _: Long -> f })
             .subscribe { navigateFromSplash() })
     }
 
