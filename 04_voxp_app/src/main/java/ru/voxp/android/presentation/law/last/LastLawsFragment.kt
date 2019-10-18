@@ -1,22 +1,26 @@
 package ru.voxp.android.presentation.law.last
 
+import android.content.Context
 import android.graphics.Rect
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.State
 import androidx.transition.*
 import ru.voxp.android.R
-import ru.voxp.android.R.integer
 import ru.voxp.android.databinding.LastLawsFragmentBinding
 import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.presentation.law.card.LawCardAdapter
+
 
 class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFragmentBinding>(
     R.layout.last_laws_fragment,
@@ -47,7 +51,7 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
                 }
             })
             .apply {
-                duration = getLong(integer.last_law_fragment_shared_element_transition_duration)
+                duration = getLong(R.integer.last_law_fragment_shared_element_transition_duration)
             }
     }
 
@@ -141,16 +145,16 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
     }
 
     private fun changeViewVisibility(targetVisible: Boolean, targetView: View) {
-        if ((if (targetVisible) View.VISIBLE else View.GONE) != targetView.visibility) {
+        if ((if (targetVisible) VISIBLE else GONE) != targetView.visibility) {
             if (targetVisible) {
                 targetView.alpha = 0f
-                targetView.visibility = View.VISIBLE
+                targetView.visibility = VISIBLE
                 targetView.animate()
                     .alpha(1f)
                     .setDuration(getLong(R.integer.last_law_fragment_visibility_fade_duration))
                     .start()
             } else {
-                targetView.visibility = View.GONE
+                targetView.visibility = GONE
             }
         }
     }
@@ -160,6 +164,10 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         currentConstraints.clone(binding.lastLawsFragmentToolbar)
         val targetConstraints = ConstraintSet()
         targetConstraints.clone(binding.lastLawsFragmentToolbar)
+        val transition = AutoTransition().apply {
+            duration = getLong(R.integer.last_law_fragment_toolbar_expansion_duration)
+        }
+        TransitionManager.beginDelayedTransition(binding.lastLawsFragmentToolbar, transition)
         targetConstraints.setVisibility(
             R.id.last_laws_fragment_toolbar_icon,
             if (searchExpanded) GONE else VISIBLE
@@ -168,10 +176,24 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
             R.id.last_laws_fragment_header,
             if (searchExpanded) GONE else VISIBLE
         )
-        targetConstraints.applyTo(binding.lastLawsFragmentToolbar)
-        val transition = AutoTransition().apply {
-            duration = getLong(R.integer.last_law_fragment_toolbar_expansion_duration)
+        targetConstraints.setVisibility(
+            R.id.last_laws_fragment_toolbar_search,
+            if (searchExpanded) VISIBLE else GONE
+        )
+        if (searchExpanded) {
+            binding.lastLawsFragmentToolbarSearch.requestFocus()
+            val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.lastLawsFragmentToolbarSearch, InputMethodManager.SHOW_FORCED)
+        } else {
+            val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.lastLawsFragmentToolbarSearch.windowToken, 0)
         }
-        TransitionManager.beginDelayedTransition(binding.lastLawsFragmentToolbar, transition)
+        val searchIconId = if (searchExpanded) R.drawable.ic_search_to_close else R.drawable.ic_close_to_search
+        val searchIcon = ResourcesCompat.getDrawable(context!!.resources, searchIconId, null)
+        binding.lastLawsFragmentToolbarSearchIcon.setImageDrawable(searchIcon)
+        if (searchIcon is Animatable) {
+            searchIcon.start()
+        }
+        targetConstraints.applyTo(binding.lastLawsFragmentToolbar)
     }
 }

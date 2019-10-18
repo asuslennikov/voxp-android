@@ -37,8 +37,8 @@
                 android:id="@+id/last_laws_fragment_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/toolbar_icon_size"
                 android:clipChildren="false"
+                android:minHeight="@dimen/toolbar_icon_size"
                 app:layout_scrollFlags="scroll|enterAlways|snap">
 
                 <ImageView
@@ -48,7 +48,6 @@
                     android:contentDescription="@string/last_laws_fragment_toolbar_icon_description"
                     android:padding="@dimen/element_default_padding"
                     android:transitionName="last_laws_fragment_toolbar_icon"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_bullhorn_toolbar" />
@@ -58,28 +57,52 @@
                     style="@style/AppBarText"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/toolbar_icon_size"
+                    android:ellipsize="end"
                     android:gravity="center_vertical"
+                    android:paddingStart="@dimen/element_default_padding"
                     android:paddingEnd="@dimen/element_default_padding"
-                    android:paddingRight="@dimen/element_default_padding"
                     android:text="@string/last_laws_fragment_header_text"
-                    app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
-                    app:layout_constraintLeft_toRightOf="@id/last_laws_fragment_toolbar_icon"
-                    app:layout_constraintStart_toEndOf="@id/last_laws_fragment_toolbar_icon"
+                    app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_bottom"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.SearchView
+                <EditText
                     android:id="@+id/last_laws_fragment_toolbar_search"
-                    style="@style/ToolbarSearchStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/element_default_padding"
+                    android:hint="@string/last_laws_fragment_search_hint"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"
+                    android:theme="@style/ToolbarSearchTheme"
+                    android:visibility="gone"
+                    app:backgroundTint="@color/primaryLightColor"
+                    app:layout_constraintBottom_toTopOf="@id/last_laws_fragment_toolbar_bottom"
+                    app:layout_constraintEnd_toStartOf="@id/last_laws_fragment_toolbar_search_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/last_laws_fragment_toolbar_search_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:paddingStart="@dimen/element_default_padding"
-                    android:paddingLeft="@dimen/element_default_padding"
-                    android:theme="@style/ToolbarSearchTheme"
-                    app:layout_constraintBottom_toBottomOf="@id/last_laws_fragment_toolbar_icon"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{() -> viewModel.onSearchClick()}"
+                    android:padding="@dimen/element_default_padding"
+                    app:layout_constraintBottom_toTopOf="@id/last_laws_fragment_toolbar_bottom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    bind:onSearchClick="@{() -> viewModel.onSearchClick()}" />
+                    app:srcCompat="@drawable/ic_search" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/last_laws_fragment_toolbar_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="@dimen/toolbar_icon_size" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
