@@ -13,4 +13,8 @@
     <integer name="last_law_fragment_toolbar_expansion_duration">1000</integer>
 
     <integer name="law_card_loader_shimmer_duration">2400</integer>
+    <integer name="ic_search_to_close_animation_duration">400</integer>
+    <integer name="ic_close_to_search_animation_duration">
+        @integer/ic_search_to_close_animation_duration
+    </integer>
 </resources>

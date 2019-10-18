@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ic_search_figure_1_path">M4.93,4.93 C-0.73,10.59 7.76,19.07 13.41,13.41 L12.00,12.00 C8.18,15.82 2.52,10.16 6.34,6.34 z</string>
+    <string name="ic_search_figure_2_path">M4.93,4.93 C10.59,-0.73 19.07,7.76 13.41,13.41 L12.00,12.00 C15.82,8.18 10.16,2.52 6.34,6.34 z</string>
+    <string name="ic_search_figure_3_path">M12.28,13.13 L13.20,14.05 L13.41,14.83 L18.36,19.78 L19.78,18.36 L14.83,13.41 L14.05,13.20 L13.13,12.28 z</string>
+
+    <string name="ic_close_figure_1_path">M7.76,17.66 C7.76,17.66 12.71,12.71 12.71,12.71 L11.29,11.29 C11.29,11.29 6.34,16.24 6.34,16.24 z</string>
+    <string name="ic_close_figure_2_path">M17.66,7.76 C17.66,7.76 12.71,12.71 12.71,12.71 L11.29,11.29 C11.29,11.29 16.24,6.34 16.24,6.34 z</string>
+    <string name="ic_close_figure_3_path">M6.63,7.47 L6.48,7.62 L6.34,7.76 L16.24,17.66 L17.66,16.24 L7.76,6.34 L7.62,6.48 L7.47,6.63 z</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/ic_close"
+    tools:ignore="NewApi">
+
+    <target
+        android:name="figure_1"
+        android:animation="@animator/ic_close_to_search_1" />
+    <target
+        android:name="figure_2"
+        android:animation="@animator/ic_close_to_search_2" />
+    <target
+        android:name="figure_3"
+        android:animation="@animator/ic_close_to_search_3" />
+
+</animated-vector>
