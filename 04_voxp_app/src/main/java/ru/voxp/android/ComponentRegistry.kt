@@ -1,11 +1,11 @@
 package ru.voxp.android
 
 import android.content.Context
-import ru.jewelline.mvvm.base.presentation.ViewModelProvider
+import com.github.asuslennikov.mvvm.presentation.ViewModelProvider
 import ru.voxp.android.data.di.DaggerManagerComponent
-import ru.voxp.android.domain.di.DaggerUseCaseComponent
 import ru.voxp.android.di.ApplicationModule
 import ru.voxp.android.di.DaggerApplicationComponent
+import ru.voxp.android.domain.di.DaggerUseCaseComponent
 import ru.voxp.android.presentation.di.DaggerPresentationComponent
 import ru.voxp.android.presentation.di.PresentationProvider
 

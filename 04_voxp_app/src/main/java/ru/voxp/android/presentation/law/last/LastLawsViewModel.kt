@@ -1,9 +1,9 @@
 package ru.voxp.android.presentation.law.last
 
+import com.github.asuslennikov.mvvm.api.domain.UseCaseOutput.Status.*
+import com.github.asuslennikov.mvvm.api.presentation.State
+import com.github.asuslennikov.mvvm.presentation.AbstractViewModel
 import io.reactivex.disposables.Disposable
-import ru.jewelline.mvvm.base.presentation.AbstractViewModel
-import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput.Status.*
-import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.voxp.android.domain.api.ExceptionType.*
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.usecase.SearchLawsInput

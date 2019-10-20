@@ -1,7 +1,7 @@
 package ru.voxp.android.presentation.law.card
 
-import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput
-import ru.jewelline.mvvm.interfaces.presentation.Screen
+import com.github.asuslennikov.mvvm.api.domain.UseCaseOutput
+import com.github.asuslennikov.mvvm.api.presentation.Screen
 import ru.voxp.android.domain.api.ExceptionType
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.usecase.SearchLawsInput

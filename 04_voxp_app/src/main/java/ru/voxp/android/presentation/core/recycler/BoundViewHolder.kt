@@ -4,12 +4,12 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.github.asuslennikov.mvvm.api.presentation.Effect
+import com.github.asuslennikov.mvvm.api.presentation.Screen
+import com.github.asuslennikov.mvvm.api.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import ru.jewelline.mvvm.interfaces.presentation.Effect
-import ru.jewelline.mvvm.interfaces.presentation.Screen
-import ru.jewelline.mvvm.interfaces.presentation.State
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.BR
 
 open class BoundViewHolder<STATE : State, VM : ViewModel<STATE>>(itemView: View, private val viewModel: VM) :

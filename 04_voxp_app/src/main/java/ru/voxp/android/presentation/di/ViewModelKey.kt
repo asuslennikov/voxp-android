@@ -1,7 +1,7 @@
 package ru.voxp.android.presentation.di
 
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
 import dagger.MapKey
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import kotlin.annotation.AnnotationRetention.SOURCE
 import kotlin.reflect.KClass
 

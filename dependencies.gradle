@@ -3,7 +3,8 @@ ext {
             lifecycle : '2.0.0',
             navigation: '2.0.0',
             dagger    : '2.22.1',
-            retrofit  : '2.5.0'
+            retrofit  : '2.5.0',
+            mvvm      : '0.8.1'
     ]
 
     libraries = [
@@ -38,6 +39,11 @@ ext {
             androidx_core                   : "androidx.core:core-ktx:1.0.2",
             androidx_legacy                 : 'androidx.legacy:legacy-support-v4:1.0.0',
             androidx_appcompat              : "androidx.appcompat:appcompat:1.0.2",
+
+            // Android MVVM library
+            mvvm_api                        : "com.github.asuslennikov:mvvm-api:$versions.mvvm",
+            mvvm_domain                     : "com.github.asuslennikov:mvvm-domain:$versions.mvvm",
+            mvvm_presentation               : "com.github.asuslennikov:mvvm-presentation:$versions.mvvm",
 
             // UI libraries
             google_material                 : "com.google.android.material:material:1.0.0",

@@ -9,19 +9,19 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 }
 
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    api project(':01_framework_domain')
     implementation "$libraries.kotlin_stdlib"
+    implementation "$libraries.mvvm_domain"
     implementation "$libraries.dagger"
     implementation "$libraries.rxjava2"
     // Решено использовать доменные классы в качестве классов сетевого обмена (для уменьшения кодовой базы),

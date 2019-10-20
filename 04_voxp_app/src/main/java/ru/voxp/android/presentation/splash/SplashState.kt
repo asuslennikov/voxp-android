@@ -1,5 +1,5 @@
 package ru.voxp.android.presentation.splash
 
-import ru.jewelline.mvvm.interfaces.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.State
 
 data class SplashState(val animationGoing: Boolean = true) : State

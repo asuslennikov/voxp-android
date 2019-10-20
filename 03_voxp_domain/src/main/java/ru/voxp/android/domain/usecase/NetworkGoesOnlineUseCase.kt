@@ -1,12 +1,12 @@
 package ru.voxp.android.domain.usecase
 
+import com.github.asuslennikov.mvvm.domain.AbstractUseCase
+import com.github.asuslennikov.mvvm.domain.AbstractUseCaseOutput
+import com.github.asuslennikov.mvvm.domain.EmptyUseCaseInput
+import com.github.asuslennikov.mvvm.domain.UseCaseExecution
 import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import ru.jewelline.mvvm.base.domain.AbstractUseCase
-import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
-import ru.jewelline.mvvm.base.domain.EmptyUseCaseInput
-import ru.jewelline.mvvm.base.domain.UseCaseExecution
 import ru.voxp.android.domain.api.network.NetworkManager
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject

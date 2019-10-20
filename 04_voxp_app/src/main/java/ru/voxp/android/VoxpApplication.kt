@@ -3,10 +3,10 @@ package ru.voxp.android
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
+import com.github.asuslennikov.mvvm.presentation.ViewModelProvider
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import ru.jewelline.mvvm.base.presentation.ViewModelProvider
 import ru.voxp.android.InitializationStatus.COMPLETE
 
 class VoxpApplication : Application() {

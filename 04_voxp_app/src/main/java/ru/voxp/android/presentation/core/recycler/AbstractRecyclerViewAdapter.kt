@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import ru.jewelline.mvvm.base.presentation.ViewModelProvider
-import ru.jewelline.mvvm.interfaces.presentation.State
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
+import com.github.asuslennikov.mvvm.api.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
+import com.github.asuslennikov.mvvm.presentation.ViewModelProvider
 
 abstract class AbstractRecyclerViewAdapter(private val viewModelProvider: ViewModelProvider.Linked) :
     ListAdapter<State, BoundViewHolder<out State, *>>(StateListItemCallback()) {

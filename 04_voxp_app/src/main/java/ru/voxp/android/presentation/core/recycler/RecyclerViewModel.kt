@@ -1,16 +1,16 @@
 package ru.voxp.android.presentation.core.recycler
 
 import androidx.annotation.CallSuper
+import com.github.asuslennikov.mvvm.api.presentation.Effect
+import com.github.asuslennikov.mvvm.api.presentation.Screen
+import com.github.asuslennikov.mvvm.api.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import ru.jewelline.mvvm.interfaces.presentation.Effect
-import ru.jewelline.mvvm.interfaces.presentation.Screen
-import ru.jewelline.mvvm.interfaces.presentation.State
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 
 abstract class RecyclerViewModel<STATE : State> : androidx.lifecycle.ViewModel(), ViewModel<STATE> {
     private val stateMapping: MutableMap<Any, BehaviorSubject<STATE>> = HashMap()

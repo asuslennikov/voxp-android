@@ -1,5 +1,9 @@
 package ru.voxp.android.domain.usecase
 
+import com.github.asuslennikov.mvvm.api.domain.UseCase
+import com.github.asuslennikov.mvvm.api.domain.UseCaseInput
+import com.github.asuslennikov.mvvm.api.domain.UseCaseOutput
+import com.github.asuslennikov.mvvm.domain.AbstractUseCaseOutput
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
@@ -7,10 +11,6 @@ import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import ru.jewelline.mvvm.base.domain.AbstractUseCaseOutput
-import ru.jewelline.mvvm.interfaces.domain.UseCase
-import ru.jewelline.mvvm.interfaces.domain.UseCaseInput
-import ru.jewelline.mvvm.interfaces.domain.UseCaseOutput
 import ru.voxp.android.domain.api.ExceptionType
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law

@@ -1,4 +1,4 @@
-package ru.jewelline.mvvm.interfaces;
+package ru.voxp.android.presentation;
 
 import androidx.annotation.NonNull;
 

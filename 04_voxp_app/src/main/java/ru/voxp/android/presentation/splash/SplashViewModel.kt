@@ -2,13 +2,13 @@ package ru.voxp.android.presentation.splash
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.github.asuslennikov.mvvm.api.presentation.Effect
+import com.github.asuslennikov.mvvm.api.presentation.Screen
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
+import com.github.asuslennikov.mvvm.presentation.AbstractViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import ru.jewelline.mvvm.base.presentation.AbstractViewModel
-import ru.jewelline.mvvm.interfaces.presentation.Effect
-import ru.jewelline.mvvm.interfaces.presentation.Screen
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.InitializationStatus
 import ru.voxp.android.R
 import ru.voxp.android.VoxpApplication

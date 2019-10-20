@@ -1,6 +1,6 @@
 package ru.voxp.android.presentation.law.card
 
-import ru.jewelline.mvvm.interfaces.HasKey
+import ru.voxp.android.presentation.HasKey
 import ru.voxp.android.presentation.error.ErrorPanelState
 
 class LawLoaderState(private val searchRequestKey: String) : ErrorPanelState(), HasKey<String> {

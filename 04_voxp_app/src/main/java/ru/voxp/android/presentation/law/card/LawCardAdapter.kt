@@ -4,11 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
+import com.github.asuslennikov.mvvm.api.presentation.Effect
+import com.github.asuslennikov.mvvm.api.presentation.State
+import com.github.asuslennikov.mvvm.presentation.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import io.supercharge.shimmerlayout.ShimmerLayout
-import ru.jewelline.mvvm.base.presentation.ViewModelProvider
-import ru.jewelline.mvvm.interfaces.presentation.Effect
-import ru.jewelline.mvvm.interfaces.presentation.State
 import ru.voxp.android.BR
 import ru.voxp.android.R
 import ru.voxp.android.presentation.core.recycler.AbstractRecyclerViewAdapter

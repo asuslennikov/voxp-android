@@ -1,14 +1,14 @@
 package ru.voxp.android.presentation.di
 
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
+import com.github.asuslennikov.mvvm.presentation.ViewModelFactory
+import com.github.asuslennikov.mvvm.presentation.ViewModelProvider
+import com.github.asuslennikov.mvvm.presentation.di.AndroidXViewModelProvider
+import com.github.asuslennikov.mvvm.presentation.di.InjectableViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import ru.jewelline.mvvm.base.di.AndroidXViewModelProvider
-import ru.jewelline.mvvm.base.di.InjectableViewModelFactory
-import ru.jewelline.mvvm.base.presentation.ViewModelFactory
-import ru.jewelline.mvvm.base.presentation.ViewModelProvider
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
 import ru.voxp.android.presentation.law.card.LawCardViewModel
 import ru.voxp.android.presentation.law.card.LawLoaderViewModel
 import ru.voxp.android.presentation.law.last.LastLawsViewModel

@@ -1,6 +1,6 @@
 package ru.voxp.android.presentation.law.card
 
-import ru.jewelline.mvvm.interfaces.presentation.Screen
+import com.github.asuslennikov.mvvm.api.presentation.Screen
 import ru.voxp.android.R
 import ru.voxp.android.presentation.core.recycler.RecyclerViewModel
 import javax.inject.Inject

@@ -1,10 +1,10 @@
 package ru.voxp.android.presentation.core
 
 import androidx.databinding.ViewDataBinding
-import ru.jewelline.mvvm.base.presentation.BoundFragmentScreen
-import ru.jewelline.mvvm.base.presentation.ViewModelProvider
-import ru.jewelline.mvvm.interfaces.presentation.State
-import ru.jewelline.mvvm.interfaces.presentation.ViewModel
+import com.github.asuslennikov.mvvm.api.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.ViewModel
+import com.github.asuslennikov.mvvm.presentation.BoundFragmentScreen
+import com.github.asuslennikov.mvvm.presentation.ViewModelProvider
 import ru.voxp.android.BR
 import ru.voxp.android.VoxpApplication
 

@@ -1,6 +1,6 @@
 package ru.voxp.android.presentation.law.last
 
-import ru.jewelline.mvvm.interfaces.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.State
 import ru.voxp.android.R
 import ru.voxp.android.presentation.error.ErrorPanelState
 import java.util.*

@@ -1,5 +1,5 @@
 package ru.voxp.android.presentation.law.card
 
-import ru.jewelline.mvvm.interfaces.presentation.Effect
+import com.github.asuslennikov.mvvm.api.presentation.Effect
 
 data class ShowSnackbarMessageEffect(val messageId: Int) : Effect

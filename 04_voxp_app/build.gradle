@@ -44,9 +44,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':02_framework_presentation')
     implementation project(':03_voxp_domain')
+    implementation "$libraries.mvvm_presentation"
 
     implementation "$libraries.kotlin_stdlib"
     implementation "$libraries.androidx_core"

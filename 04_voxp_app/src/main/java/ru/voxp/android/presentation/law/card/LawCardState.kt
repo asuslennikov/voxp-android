@@ -1,7 +1,7 @@
 package ru.voxp.android.presentation.law.card
 
-import ru.jewelline.mvvm.interfaces.HasKey
-import ru.jewelline.mvvm.interfaces.presentation.State
+import com.github.asuslennikov.mvvm.api.presentation.State
+import ru.voxp.android.presentation.HasKey
 
 open class LawCardState(
     val id: String,
