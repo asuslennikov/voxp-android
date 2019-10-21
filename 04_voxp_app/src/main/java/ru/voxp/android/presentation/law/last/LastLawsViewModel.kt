@@ -1,5 +1,6 @@
 package ru.voxp.android.presentation.law.last
 
+import android.text.TextUtils
 import android.view.inputmethod.EditorInfo
 import com.github.asuslennikov.mvvm.api.domain.UseCaseOutput.Status.*
 import com.github.asuslennikov.mvvm.api.presentation.State
@@ -114,9 +115,16 @@ class LastLawsViewModel @Inject constructor(
     }
 
     fun onSearchClick() {
-        sendState(currentState.clone().apply {
-            searchExpanded = !currentState.searchExpanded
-        })
+        if (currentState.searchExpanded && !TextUtils.isEmpty(currentState.searchText)) {
+            sendState(currentState.apply {
+                searchText = ""
+
+            })
+        } else {
+            sendState(currentState.clone().apply {
+                searchExpanded = !currentState.searchExpanded
+            })
+        }
     }
 
     fun onSearchTriggered(actionId: Int) {
