@@ -21,7 +21,6 @@ import ru.voxp.android.databinding.LastLawsFragmentBinding
 import ru.voxp.android.presentation.core.Fragment
 import ru.voxp.android.presentation.law.card.LawCardAdapter
 
-
 class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFragmentBinding>(
     R.layout.last_laws_fragment,
     LastLawsViewModel::class.java
@@ -164,30 +163,11 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
         currentConstraints.clone(binding.lastLawsFragmentToolbar)
         val targetConstraints = ConstraintSet()
         targetConstraints.clone(binding.lastLawsFragmentToolbar)
-        val transition = AutoTransition().apply {
-            duration = getLong(R.integer.last_law_fragment_toolbar_expansion_duration)
-        }
+        val transition = AutoTransition().apply { duration = getLong(R.integer.last_law_fragment_toolbar_expansion_duration) }
         TransitionManager.beginDelayedTransition(binding.lastLawsFragmentToolbar, transition)
-        targetConstraints.setVisibility(
-            R.id.last_laws_fragment_toolbar_icon,
-            if (searchExpanded) GONE else VISIBLE
-        )
-        targetConstraints.setVisibility(
-            R.id.last_laws_fragment_header,
-            if (searchExpanded) GONE else VISIBLE
-        )
-        targetConstraints.setVisibility(
-            R.id.last_laws_fragment_toolbar_search,
-            if (searchExpanded) VISIBLE else GONE
-        )
-        if (searchExpanded) {
-            binding.lastLawsFragmentToolbarSearch.requestFocus()
-            val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(binding.lastLawsFragmentToolbarSearch, InputMethodManager.SHOW_FORCED)
-        } else {
-            val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(binding.lastLawsFragmentToolbarSearch.windowToken, 0)
-        }
+        targetConstraints.setVisibility(R.id.last_laws_fragment_toolbar_icon, if (searchExpanded) GONE else VISIBLE)
+        targetConstraints.setVisibility(R.id.last_laws_fragment_header, if (searchExpanded) GONE else VISIBLE)
+        targetConstraints.setVisibility(R.id.last_laws_fragment_toolbar_search, if (searchExpanded) VISIBLE else GONE)
         val searchIconId = if (searchExpanded) R.drawable.ic_search_to_close else R.drawable.ic_close_to_search
         val searchIcon = ResourcesCompat.getDrawable(context!!.resources, searchIconId, null)
         binding.lastLawsFragmentToolbarSearchIcon.setImageDrawable(searchIcon)
@@ -195,5 +175,13 @@ class LastLawsFragment : Fragment<LastLawsState, LastLawsViewModel, LastLawsFrag
             searchIcon.start()
         }
         targetConstraints.applyTo(binding.lastLawsFragmentToolbar)
+        if (searchExpanded) {
+            binding.lastLawsFragmentToolbarSearch.requestFocus()
+            val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.lastLawsFragmentToolbarSearch, InputMethodManager.SHOW_IMPLICIT)
+        } else {
+            val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.lastLawsFragmentToolbarSearch.windowToken, 0)
+        }
     }
 }
