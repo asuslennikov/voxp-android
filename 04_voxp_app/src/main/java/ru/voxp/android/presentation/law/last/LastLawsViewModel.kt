@@ -111,7 +111,12 @@ class LastLawsViewModel @Inject constructor(
     }
 
     fun triggerNextPageLoading() {
-        searchLawsUseCase.triggerNextPageLoading(SearchLawsInput(searchLawsTaskKey))
+        searchLawsUseCase.triggerNextPageLoading(
+            SearchLawsInput(
+                searchLawsTaskKey,
+                name = currentState.searchText
+            )
+        )
     }
 
     fun onSearchClick() {
