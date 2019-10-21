@@ -14,6 +14,7 @@ import io.reactivex.subjects.Subject
 import ru.voxp.android.domain.api.ExceptionType
 import ru.voxp.android.domain.api.VoxpException
 import ru.voxp.android.domain.api.model.Law
+import ru.voxp.android.domain.api.model.SearchRequest
 import ru.voxp.android.domain.api.network.NetworkManager
 import ru.voxp.android.domain.api.remote.RemoteRepository
 import ru.voxp.android.domain.di.UseCaseScope
@@ -23,6 +24,7 @@ import kotlin.collections.ArrayList
 
 data class SearchLawsInput(
     val key: String? = null,
+    val name: String? = null,
     val fetchCount: Int = 20
 ) : UseCaseInput
 
@@ -171,7 +173,7 @@ class SearchLawsUseCase @Inject constructor(
         })
         val start: Int = output.getData().size
         output.disposable.add(
-            remoteRepository.getLastLaws(start / input.fetchCount + 1, input.fetchCount)
+            remoteRepository.getLastLaws(SearchRequest().apply { name = input.name }, start / input.fetchCount + 1, input.fetchCount)
                 .observeOn(getScheduler())
                 .subscribe(
                     Consumer { response ->

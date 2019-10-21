@@ -1,5 +1,6 @@
 package ru.voxp.android.presentation.law.last
 
+import android.view.inputmethod.EditorInfo
 import com.github.asuslennikov.mvvm.api.domain.UseCaseOutput.Status.*
 import com.github.asuslennikov.mvvm.api.presentation.State
 import com.github.asuslennikov.mvvm.presentation.AbstractViewModel
@@ -31,8 +32,9 @@ class LastLawsViewModel @Inject constructor(
 
     private fun requestLastLaws() {
         cancelFetchLastLawsTask()
+        val searchLawsInput = SearchLawsInput(name = currentState.searchText)
         searchLawsTaskDisposable = collectDisposable(
-            searchLawsUseCase.execute(SearchLawsInput())
+            searchLawsUseCase.execute(searchLawsInput)
                 .subscribe { result ->
                     searchLawsTaskKey = result.getKey()
                     when (result.getStatus()) {
@@ -62,7 +64,7 @@ class LastLawsViewModel @Inject constructor(
     }
 
     private fun handleGetLastLawsFailure(searchLawsOutput: SearchLawsOutput) {
-        if (!searchLawsOutput.getData().isEmpty()) {
+        if (searchLawsOutput.getData().isNotEmpty()) {
             return
         }
         if (searchLawsOutput.getException() is VoxpException) {
@@ -115,5 +117,11 @@ class LastLawsViewModel @Inject constructor(
         sendState(currentState.clone().apply {
             searchExpanded = !currentState.searchExpanded
         })
+    }
+
+    fun onSearchTriggered(actionId: Int) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            requestLastLaws()
+        }
     }
 }

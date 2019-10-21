@@ -9,6 +9,7 @@ class LastLawsState : ErrorPanelState() {
     var loaderVisible: Boolean = false
     var lawsVisible: Boolean = false
     var searchExpanded: Boolean = false
+    var searchText: String = ""
     var laws: List<State> = Collections.emptyList()
 
     fun clone(): LastLawsState {
